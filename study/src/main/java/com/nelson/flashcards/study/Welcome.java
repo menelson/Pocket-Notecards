@@ -14,6 +14,8 @@ public class Welcome extends ActionBarActivity {
         setContentView(R.layout.activity_welcome);
     }
 
+    //test
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
