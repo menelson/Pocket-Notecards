@@ -29,14 +29,13 @@ public class Welcome extends ActionBarActivity {
                 // Handle action bar item clicks here. The action bar will
                 // automatically handle clicks on the Home/Up button, so long
                 // as you specify a parent activity in AndroidManifest.xml.
-                /*int id = item.getItemId();
-                if (id == R.id.action_settings) {
-                return true;  }*/
+                View v;
                 switch(item.getItemId()) {
                     case R.id.action_settings:
+                        launchSettings(item);
                         break;
                     case R.id.create_cards:
-                        //launchCreateQuestion();
+                        launchCreateQuestion(item);
                         break;
                     default:
                         break;
@@ -45,14 +44,25 @@ public class Welcome extends ActionBarActivity {
     }
 
     //Go to Create Question Screen
-    public void launchCreateQuestion(View v) {
-        //Intent intentCreate = new Intent(this, CreateQuestion.class);
-        //startActivity(intentCreate);
+    public void launchCreateQuestion(MenuItem item) {
+        Intent intentCreate = new Intent(this, CreateQuestion.class);
+        startActivity(intentCreate);
     }
 
     //Go to Settings
-    public void launchSettings(View view) {
-        //Intent intentSettings = new Intent(this, CardSettings.class);
-        //startActivity(intentSettings);
+    //Null Pointer Exception
+    public void launchSettings(MenuItem item) {
+        Intent intentSettings = new Intent(this, CardSettings.class);
+        startActivity(intentSettings);
+    }
+
+    //Launch NoteCard Activity based on Deck Selected.
+    public void launchNoteCard() {
+
+    }
+
+    //Get Stored NoteCard Table Name
+    public void getNoteCardTableName() {
+
     }
 }

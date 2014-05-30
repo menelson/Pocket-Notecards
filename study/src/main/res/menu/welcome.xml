@@ -9,7 +9,6 @@
         app:showAsAction="never" />
 
     <item android:id="@+id/create_cards"
-        android:title="@string/create"
-        />
+        android:title="@string/create"  />
 
 </menu>
