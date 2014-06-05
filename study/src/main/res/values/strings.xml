@@ -14,6 +14,7 @@
     <string name="delete">Delete Question</string>
     <string name="edit">Edit Question</string>
     <string name="file">File Name</string>
+    <string name="deckName">Note Card Title</string>
     <string name="question">Enter a Question</string>
     <string name="answer">Enter the Answer</string>
     <string name="add">Add</string>
