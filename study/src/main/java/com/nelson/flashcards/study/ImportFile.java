@@ -21,9 +21,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-public class CreateQuestion extends Activity {
+public class ImportFile extends Activity {
 	
 	private ArrayList<String> question = new ArrayList<String>();
 	private ArrayList<String> answer = new ArrayList<String>();	
@@ -35,8 +34,6 @@ public class CreateQuestion extends Activity {
 	private String type2 = "Answer";
 	private String empty = "";	
 	protected Intent intent2 = getIntent();	//does nothing?
-
-    NoteCardDB db = new NoteCardDB(this);
 
 
 
@@ -57,20 +54,14 @@ public class CreateQuestion extends Activity {
         			quest = editQuestion.getText().toString();
         			answ = editAnswer.getText().toString();        			
         			
-        			//Deprecated - Adding to respective ArrayLists
-        			//question.add(quest);
-        			//answer.add(answ);
-
-                    //Adding to database
-                    db.open();
-                    long id = db.insertRecord(quest, answ, 0);
-                    db.close();
+        			//Adding to respective ArrayLists
+        			question.add(quest);
+        			answer.add(answ);        			
         			
         			((EditText) findViewById(R.id.editText2)).setText("");
             		((EditText) findViewById(R.id.editText3)).setText("");
-                    Toast.makeText(CreateQuestion.this, "Question and Answer Added", Toast.LENGTH_LONG).show();
-
-                }
+            		
+        		}
         	});
         
         //Set onClick to write ArrayList and return to main menu
