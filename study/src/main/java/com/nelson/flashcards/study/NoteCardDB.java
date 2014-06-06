@@ -27,8 +27,8 @@ public class NoteCardDB {
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE =
-            " create table if not exists " + DATABASE_TABLE + " ("+KEY_ROWID+" integer primary key autoincrement, "
-            + KEY_QUESTION + "VARCHAR not null, " + KEY_ANSWER + " VARCHAR, " + KEY_KNOWN + " INT );";
+            " create table if not exists " + DATABASE_NAME+"."+DATABASE_TABLE + " (id integer primary key autoincrement, "
+            + "question VARCHAR not null, answer VARCHAR, known INTEGER );";
 
     private final Context context;
 
@@ -58,7 +58,7 @@ public class NoteCardDB {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database from version " + oldVersion
-                + " to " + newVersion + ", which will destory all old data");
+                + " to " + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS contacts");
             onCreate(db);
         }

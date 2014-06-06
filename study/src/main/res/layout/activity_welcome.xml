@@ -26,7 +26,7 @@
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:onClick="launchQuestion"
+        android:onClick="launchNoteCard"
         android:text="@string/deck1" />
 
     <Button

@@ -57,8 +57,9 @@ public class Welcome extends ActionBarActivity {
     }
 
     //Launch NoteCard Activity based on Deck Selected.
-    public void launchNoteCard() {
-
+    public void launchNoteCard(View view) {
+        Intent intent = new Intent(this, NoteCard.class);
+        startActivity(intent);
     }
 
     //Get Stored NoteCard Table Name
