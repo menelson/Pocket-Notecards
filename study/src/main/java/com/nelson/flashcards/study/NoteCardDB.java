@@ -15,19 +15,19 @@ import java.util.Currency;
  * Created by Mike on 5/29/2014.
  */
 public class NoteCardDB {
-    //Tutorial Examples Modify
+
     public static final String KEY_ROWID = "id";
     public static final String KEY_QUESTION = "question";
     public static final String KEY_ANSWER = "answer";
     public static final String KEY_KNOWN = "known";
     private static final String TAG = "NoteCardDB";
 
-    private static final String DATABASE_NAME = "Note Cards";
+    private static final String DATABASE_NAME = "NoteCards";
     private static final String DATABASE_TABLE = "Multiplication";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE =
-            " create table if not exists " + DATABASE_NAME+"."+DATABASE_TABLE + " (id integer primary key autoincrement, "
+            " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
             + "question VARCHAR not null, answer VARCHAR, known INTEGER );";
 
     private final Context context;

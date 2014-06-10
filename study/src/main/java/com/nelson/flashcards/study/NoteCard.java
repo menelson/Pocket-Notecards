@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,18 +26,21 @@ public class NoteCard extends ActionBarActivity {
     protected ArrayList<Integer> known = new ArrayList<Integer>();
 
     NoteCardDB db = new NoteCardDB(this);
-    TextView mainDisplay = (TextView)findViewById(R.id.question_text);
     Random randomNum = new Random();
     GestureDetectorCompat gestDetector;
+    TextView mainDisplay;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
-        //loadData();
-        //size = questions.size();
-        //randomNum = new Random(size);
+        mainDisplay = (TextView)findViewById(R.id.question_text);
+        MotionEvent one;
+        gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        loadData();
+        size = questions.size();
+        randomNum = new Random(size);
     }
 
 
@@ -78,43 +82,9 @@ public class NoteCard extends ActionBarActivity {
         return gestDetector.onTouchEvent(one);
     }
 
-
-    public boolean onDown(MotionEvent arg0) {
-        // Does nothing
-        return false;
-    }
-
-    public boolean onFling(MotionEvent start, MotionEvent finish, float xVelocity, float yVelocity) {
-        boolean result = false;
-        try {
-            float diffY = finish.getY() - start.getY();
-            float diffX = finish.getX() - start.getX();
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(xVelocity) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffX > 0) {
-                        onSwipeRight();
-                    } else {
-                        onSwipeLeft();
-                    }
-                }
-            } else {
-                if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(yVelocity) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY > 0) {
-                        onSwipeBottom();
-                    } else {
-                        onSwipeTop();
-                    }
-                }
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return result;
-    }
-
     //Reveals answer to the Note Card
     public void onSwipeTop() {
-        mainDisplay.setText(answers.get(index));
+       mainDisplay.setText(answers.get(index));
     }
 
     //Goes back to the question on the Note Card
@@ -126,7 +96,7 @@ public class NoteCard extends ActionBarActivity {
     public void onSwipeLeft() {
         previous = index;
         index = randomNum.nextInt(size);
-        mainDisplay.setText(questions.get(index));
+       mainDisplay.setText(questions.get(index));
     }
 
     public void onSwipeRight() {
@@ -135,22 +105,36 @@ public class NoteCard extends ActionBarActivity {
         mainDisplay.setText(questions.get(index));
     }
 
-    public void onLongPress(MotionEvent e) {
-        // Nothing Happens on Long Press
-    }
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent start, MotionEvent finish,
+                               float xVelocity, float yVelocity) {
 
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                            float distanceY) {
-        // Does nothing currently
-        return false;
-    }
-
-    public void onShowPress(MotionEvent e) {
-        // Does nothing currently
-    }
-
-    public boolean onSingleTapUp(MotionEvent e) {
-        // Does nothing currently
-        return false;
+            boolean result = false;
+            try {
+                float diffY = finish.getY() - start.getY();
+                float diffX = finish.getX() - start.getX();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(xVelocity) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight();
+                        } else {
+                            onSwipeLeft();
+                        }
+                    }
+                } else {
+                    if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(yVelocity) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffY > 0) {
+                            onSwipeBottom();
+                        } else {
+                            onSwipeTop();
+                        }
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            return result;
+        }
     }
 }
