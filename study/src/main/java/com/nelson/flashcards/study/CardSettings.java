@@ -40,7 +40,7 @@ public class CardSettings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.card_settings);		
-		
+		/*
 		File [] cards = folder.listFiles();
 		
 		if(cards.length > 0) {
@@ -59,7 +59,7 @@ public class CardSettings extends Activity {
 		
 		for(int i = 0; i < fileName.length; i++) {
 			fileList.add(fileName[i]);
-		}
+		} */
 		
 		//Setting up Font Sizes
 		float defaultFont = 16;

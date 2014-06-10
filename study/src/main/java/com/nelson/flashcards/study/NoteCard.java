@@ -56,9 +56,15 @@ public class NoteCard extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.question_add:
+                break;
+            case R.id.question_edit:
+                break;
+            case R.id.question_delete:
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -68,9 +74,9 @@ public class NoteCard extends ActionBarActivity {
         Cursor c = db.getAllRecords();
         if (c.moveToFirst()){
             while(c.moveToNext()){
-                questions.add(c.getString(0));
-                answers.add(c.getString(1));
-                known.add(c.getInt(2));
+                questions.add(c.getString(1));
+                answers.add(c.getString(2));
+                known.add(c.getInt(3));
             }
         }
         db.close();
