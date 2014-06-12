@@ -41,11 +41,17 @@ public class NoteCard extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
-        MotionEvent one;
+        //MotionEvent one;
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         loadData();
+        index = 1;
         size = questions.size();
         randomNum = new Random(size);
+
+        for(int i = 0; i < size; i++) {
+            String test = questions.get(index) +" = " +answers.get(index);
+            Toast.makeText(this,test, Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -119,7 +125,7 @@ public class NoteCard extends ActionBarActivity {
 
                 switch (addDelUp) {
                     case 1:
-                        addQuestion(questions.get(index), answers.get(index), known.get(index));
+                        addQuestion(questEdit.getText().toString(), answerEdit.getText().toString(), 0);
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
@@ -127,7 +133,7 @@ public class NoteCard extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        deleteQuestion((long)index + 1);
+                        deleteQuestion((long)index);
                         Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     default:
