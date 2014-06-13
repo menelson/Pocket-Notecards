@@ -41,7 +41,7 @@ public class NoteCard extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
-        MotionEvent one;
+        //MotionEvent one;
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         loadData();
         size = questions.size();
@@ -109,7 +109,7 @@ public class NoteCard extends ActionBarActivity {
         aText.setText(aPrompt);
         linLayout.addView(aText);
         final EditText answerEdit = new EditText(this);
-        answerEdit.setHint(aPrompt);
+        answerEdit.setText(aPrompt);
         linLayout.addView(answerEdit);
         popUp.setView(linLayout);
 
@@ -123,11 +123,11 @@ public class NoteCard extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        editQuestion((long)index + 1, questions.get(index), answers.get(index), known.get(index));
+                        editQuestion((long)index, questions.get(index), answers.get(index), known.get(index));
                         Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        deleteQuestion((long)index + 1);
+                        deleteQuestion((long)index);
                         Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -157,6 +157,7 @@ public class NoteCard extends ActionBarActivity {
     }
 
     public void editQuestion (long idx, String q, String a, int k) {
+        idx += 1;
         db.open();
         db.updateRecord(idx, q, a ,k);
         db.close();
@@ -166,6 +167,7 @@ public class NoteCard extends ActionBarActivity {
     }
 
     public void deleteQuestion (long idx) {
+        idx += 1;
         db.open();
         db.deleteRecord(idx);
         db.close();
