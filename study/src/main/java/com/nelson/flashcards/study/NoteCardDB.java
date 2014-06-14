@@ -107,6 +107,7 @@ public class NoteCardDB {
 
     //Update one record
     public boolean updateRecord(long rowId, String question, String answer, int known) {
+
         ContentValues newValues = new ContentValues();
         newValues.put(KEY_QUESTION, question);
         newValues.put(KEY_ANSWER, answer);

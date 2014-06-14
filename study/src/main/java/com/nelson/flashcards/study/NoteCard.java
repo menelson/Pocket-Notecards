@@ -133,7 +133,7 @@ public class NoteCard extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        deleteQuestion((long)index);
+                        deleteQuestion((long)index + 1);
                         Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     default:
