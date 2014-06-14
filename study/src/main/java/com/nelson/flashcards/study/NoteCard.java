@@ -29,6 +29,7 @@ public class NoteCard extends ActionBarActivity {
     protected ArrayList<String> questions = new ArrayList<String>();
     protected ArrayList<String> answers = new ArrayList<String>();
     protected ArrayList<Integer> known = new ArrayList<Integer>();
+    protected ArrayList<Card> noteCards = new ArrayList<Card>();
 
     NoteCardDB db = new NoteCardDB(this);
     Random randomNum = new Random();
@@ -45,13 +46,14 @@ public class NoteCard extends ActionBarActivity {
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         loadData();
         index = 1;
-        size = questions.size();
+        size = noteCards.size();
         randomNum = new Random(size);
 
+        /*
         for(int i = 0; i < size; i++) {
             String test = questions.get(index) +" = " +answers.get(index);
             Toast.makeText(this,test, Toast.LENGTH_LONG).show();
-        }
+        }  */
     }
 
 
@@ -72,10 +74,12 @@ public class NoteCard extends ActionBarActivity {
                 displayPopUp("Add a Question and Answer","Enter the Question","Enter the Answer", 1 );
                 break;
             case R.id.question_edit:
-                displayPopUp("Edit a Question and Answer",questions.get(index),answers.get(index), 2);
+                displayPopUp("Edit a Question and Answer",noteCards.get(index).getQuestion()
+                        ,noteCards.get(index).getAnswer(), 2);
                 break;
             case R.id.question_delete:
-                displayPopUp("Delete this Question and Answer",questions.get(index),answers.get(index), 3);
+                displayPopUp("Delete this Question and Answer",noteCards.get(index).getQuestion()
+                        ,noteCards.get(index).getAnswer(), 3);
                 break;
             default:
                 break;
@@ -84,13 +88,12 @@ public class NoteCard extends ActionBarActivity {
     }
 
     public void loadData(){
+        Card card;
         db.open();
         Cursor c = db.getAllRecords();
         if (c.moveToFirst()){
             while(c.moveToNext()){
-                questions.add(c.getString(1));
-                answers.add(c.getString(2));
-                known.add(c.getInt(3));
+                noteCards.add(card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3)));
             }
         }
         db.close();
@@ -129,11 +132,12 @@ public class NoteCard extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        editQuestion((long)index + 1, questions.get(index), answers.get(index), known.get(index));
+                        editQuestion(noteCards.get(index).getRowId(), noteCards.get(index).getQuestion(),
+                                noteCards.get(index).getAnswer(), noteCards.get(index).getKnown());
                         Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        deleteQuestion((long)index + 1);
+                        deleteQuestion(noteCards.get(index).getRowId());
                         Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -166,18 +170,14 @@ public class NoteCard extends ActionBarActivity {
         db.open();
         db.updateRecord(idx, q, a ,k);
         db.close();
-        questions.set(index, q);
-        answers.set(index, a);
-        known.set(index, k);
+        //noteCards.set(index,);
     }
 
     public void deleteQuestion (long idx) {
         db.open();
         db.deleteRecord(idx);
         db.close();
-        questions.remove(index);
-        answers.remove(index);
-        known.remove(index);
+        noteCards.remove(index);
         size--;
     }
 
@@ -189,25 +189,25 @@ public class NoteCard extends ActionBarActivity {
 
     //Reveals answer to the Note Card
     public void onSwipeTop() {
-       mainDisplay.setText(answers.get(index));
+       mainDisplay.setText(noteCards.get(index).getAnswer());
     }
 
     //Goes back to the question on the Note Card
     public void onSwipeBottom() {
-        mainDisplay.setText(questions.get(index));
+        mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
     //Randomly goes to the next Note Card based on a Num Generator
     public void onSwipeLeft() {
         previous = index;
         index = randomNum.nextInt(size);
-       mainDisplay.setText(questions.get(index));
+        mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
     public void onSwipeRight() {
         //Goes back to only one previous card
         index = previous;
-        mainDisplay.setText(questions.get(index));
+        mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
