@@ -25,10 +25,6 @@ public class NoteCard extends ActionBarActivity {
     private static final int SWIPE_VELOCITY_THRESHOLD = 20;
 
     private int size, index, previous;
-
-    protected ArrayList<String> questions = new ArrayList<String>();
-    protected ArrayList<String> answers = new ArrayList<String>();
-    protected ArrayList<Integer> known = new ArrayList<Integer>();
     protected ArrayList<Card> noteCards = new ArrayList<Card>();
 
     NoteCardDB db = new NoteCardDB(this);
@@ -42,18 +38,11 @@ public class NoteCard extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
-        //MotionEvent one;
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         loadData();
-        index = 1;
+        index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
-
-        /*
-        for(int i = 0; i < size; i++) {
-            String test = questions.get(index) +" = " +answers.get(index);
-            Toast.makeText(this,test, Toast.LENGTH_LONG).show();
-        }  */
     }
 
 
@@ -93,7 +82,8 @@ public class NoteCard extends ActionBarActivity {
         Cursor c = db.getAllRecords();
         if (c.moveToFirst()){
             while(c.moveToNext()){
-                noteCards.add(card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3)));
+                card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3));
+                noteCards.add(card);
             }
         }
         db.close();
@@ -132,9 +122,14 @@ public class NoteCard extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        editQuestion(noteCards.get(index).getRowId(), noteCards.get(index).getQuestion(),
+                        Card tmpCard = new Card(noteCards.get(index).getRowId(), noteCards.get(index).getQuestion(),
                                 noteCards.get(index).getAnswer(), noteCards.get(index).getKnown());
-                        Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
+                        tmpCard.setQuestion(questEdit.getText().toString());
+                        tmpCard.setAnswer(answerEdit.getText().toString());
+                        tmpCard.setKnown(0);
+                        editQuestion(tmpCard.getRowId(), tmpCard.getQuestion(),
+                                tmpCard.getAnswer(), tmpCard.getKnown());
+                        Toast.makeText(getApplicationContext(), "Updated" + tmpCard, Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         deleteQuestion(noteCards.get(index).getRowId());
@@ -158,19 +153,19 @@ public class NoteCard extends ActionBarActivity {
 
     public void addQuestion (String q, String a, int k) {
         db.open();
-        db.insertRecord(q, a, k);
+        long i = db.insertRecord(q, a, k);
         db.close();
-        questions.add(q);
-        answers.add(a);
-        known.add(0);
+        Card newCard = new Card((int)i, q, a, k);
+        noteCards.add(newCard);
         size++;
     }
 
-    public void editQuestion (long idx, String q, String a, int k) {
+    public void editQuestion (int idx, String q, String a, int k) {
+        Card newCard = new Card(idx, q, a, k);
         db.open();
         db.updateRecord(idx, q, a ,k);
         db.close();
-        //noteCards.set(index,);
+        noteCards.set(index, newCard);
     }
 
     public void deleteQuestion (long idx) {

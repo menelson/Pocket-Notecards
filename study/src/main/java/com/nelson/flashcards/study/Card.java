@@ -4,8 +4,8 @@ package com.nelson.flashcards.study;
  * Created by Mike on 6/14/14.
  */
 public class Card {
-    private int rowId, known;
-    private String question, answer;
+    protected int rowId, known;
+    protected String question, answer;
 
     public Card (int r, String q, String a, int k) {
         rowId = r;
