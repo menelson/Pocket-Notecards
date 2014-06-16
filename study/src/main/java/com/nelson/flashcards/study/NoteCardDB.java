@@ -26,9 +26,9 @@ public class NoteCardDB {
     private static final String DATABASE_TABLE = "Multiplication";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_CREATE =
+    private static final String DATABASE_CREATE_NOTECARD =
             " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
-            + "question VARCHAR not null, answer VARCHAR, known INTEGER );";
+            + "title VARCHAR not null, question VARCHAR not null, answer VARCHAR, known INTEGER );";
 
     private final Context context;
 
@@ -49,7 +49,7 @@ public class NoteCardDB {
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
-                db.execSQL(DATABASE_CREATE);
+                db.execSQL(DATABASE_CREATE_NOTECARD);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

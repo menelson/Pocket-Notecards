@@ -42,7 +42,7 @@ public class ImportFile extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_question);
         
-        final EditText editFile = (EditText) findViewById(R.id.editText1);        
+        //final EditText editFile = (EditText) findViewById(R.id.editText1);
         final EditText editQuestion = (EditText) findViewById(R.id.editText2);        
         final EditText editAnswer = (EditText) findViewById(R.id.editText3);
                 
@@ -50,7 +50,7 @@ public class ImportFile extends Activity {
         Button add = (Button) findViewById(R.id.button1);
         add.setOnClickListener(new View.OnClickListener(){
         		public void onClick(View view){
-        			fileName = editFile.getText().toString();
+        //			fileName = editFile.getText().toString();
         			quest = editQuestion.getText().toString();
         			answ = editAnswer.getText().toString();        			
         			

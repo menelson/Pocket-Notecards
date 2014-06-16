@@ -1,11 +1,16 @@
 package com.nelson.flashcards.study;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 public class Welcome extends ActionBarActivity {
@@ -59,6 +64,7 @@ public class Welcome extends ActionBarActivity {
     //Launch NoteCard Activity based on Deck Selected.
     public void launchNoteCard(View view) {
         Intent intent = new Intent(this, NoteCard.class);
+        intent.putExtra("Table Name", "Multiplication");
         startActivity(intent);
     }
 
@@ -66,4 +72,6 @@ public class Welcome extends ActionBarActivity {
     public void getNoteCardTableName() {
 
     }
+
+
 }
