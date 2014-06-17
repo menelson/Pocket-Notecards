@@ -31,6 +31,7 @@ public class NoteCard extends ActionBarActivity {
     Random randomNum = new Random();
     GestureDetectorCompat gestDetector;
     TextView mainDisplay;
+    //String title;
 
 
     @Override
@@ -39,7 +40,11 @@ public class NoteCard extends ActionBarActivity {
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
-        loadData();
+        //*************************
+        //String title = "Multiplication";
+        String title = "Spanish";//Change to take intent var
+        //*************************
+        loadData(title);
         index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
@@ -60,10 +65,12 @@ public class NoteCard extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.question_add:
-                displayPopUp("Add a Question and Answer","Enter the Question","Enter the Answer", 1 );
+                displayPopUp("Subject: " + noteCards.get(index).getTitle(),
+                        "Enter the Question","Enter the Answer", 1 );
                 break;
             case R.id.question_edit:
-                displayPopUp("Edit a Question and Answer",noteCards.get(index).getQuestion()
+                displayPopUp("Subject: " + noteCards.get(index).getTitle(),
+                        noteCards.get(index).getQuestion()
                         ,noteCards.get(index).getAnswer(), 2);
                 break;
             case R.id.question_delete:
@@ -76,13 +83,13 @@ public class NoteCard extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadData(){
+    public void loadData(String title){
         Card card;
         db.open();
-        Cursor c = db.getAllRecords();
+        Cursor c = db.getAllRecords(title);
         if (c.moveToFirst()){
             while(c.moveToNext()){
-                card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3));
+                card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getInt(4));
                 noteCards.add(card);
             }
         }
@@ -118,16 +125,21 @@ public class NoteCard extends ActionBarActivity {
 
                 switch (addDelUp) {
                     case 1:
-                        addQuestion(questEdit.getText().toString(), answerEdit.getText().toString(), 0);
+                        addQuestion(noteCards.get(index).getTitle(),
+                                questEdit.getText().toString(),
+                                answerEdit.getText().toString(), 0);
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Card tmpCard = new Card(noteCards.get(index).getRowId(), noteCards.get(index).getQuestion(),
-                                noteCards.get(index).getAnswer(), noteCards.get(index).getKnown());
+                        Card tmpCard = new Card(noteCards.get(index).getRowId(),
+                                noteCards.get(index).getTitle(),
+                                noteCards.get(index).getQuestion(),
+                                noteCards.get(index).getAnswer(),
+                                noteCards.get(index).getKnown());
                         tmpCard.setQuestion(questEdit.getText().toString());
                         tmpCard.setAnswer(answerEdit.getText().toString());
                         tmpCard.setKnown(0);
-                        editQuestion(tmpCard.getRowId(), tmpCard.getQuestion(),
+                        editQuestion(tmpCard.getRowId(), tmpCard.getTitle(), tmpCard.getQuestion(),
                                 tmpCard.getAnswer(), tmpCard.getKnown());
                         Toast.makeText(getApplicationContext(), "Updated" + tmpCard, Toast.LENGTH_SHORT).show();
                         break;
@@ -151,19 +163,19 @@ public class NoteCard extends ActionBarActivity {
         popUp.show();
     }
 
-    public void addQuestion (String q, String a, int k) {
+    public void addQuestion (String t, String q, String a, int k) {
         db.open();
-        long i = db.insertRecord(q, a, k);
+        long i = db.insertRecord(t, q, a, k);
         db.close();
-        Card newCard = new Card((int)i, q, a, k);
+        Card newCard = new Card((int)i, t, q, a, k);
         noteCards.add(newCard);
         size++;
     }
 
-    public void editQuestion (int idx, String q, String a, int k) {
-        Card newCard = new Card(idx, q, a, k);
+    public void editQuestion (int idx, String t, String q, String a, int k) {
+        Card newCard = new Card(idx, t, q, a, k);
         db.open();
-        db.updateRecord(idx, q, a ,k);
+        db.updateRecord(idx, t, q, a ,k);
         db.close();
         noteCards.set(index, newCard);
     }

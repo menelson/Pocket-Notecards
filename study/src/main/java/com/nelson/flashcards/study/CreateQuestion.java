@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class CreateQuestion extends Activity {
 
-	private String question;
+	private String title, question;
 	private String answer;
 	protected Intent intent2 = getIntent();	//does nothing?
 
@@ -34,18 +34,20 @@ public class CreateQuestion extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_question);
 
+        final EditText editTitle = (EditText) findViewById(R.id.title_edit);
         final EditText editQuestion = (EditText) findViewById(R.id.editText2);        
         final EditText editAnswer = (EditText) findViewById(R.id.editText3);
 
         Button add = (Button) findViewById(R.id.button1);
         add.setOnClickListener(new View.OnClickListener(){
         		public void onClick(View view){
+                    title = editTitle.getText().toString();
                     question = editQuestion.getText().toString();
         			answer = editAnswer.getText().toString();
 
                     //Adding to database
                     db.open();
-                    long id = db.insertRecord(question, answer, 0);
+                    long id = db.insertRecord(title, question, answer, 0);
                     db.close();
         			
         			((EditText) findViewById(R.id.editText2)).setText("");
