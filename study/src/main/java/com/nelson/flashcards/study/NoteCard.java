@@ -48,6 +48,16 @@ public class NoteCard extends ActionBarActivity {
         index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
+
+        db.open();
+        Cursor c = db.getNoteCardTitles();
+        if (c.moveToFirst()) {
+            while (c.moveToNext()) {
+                Toast.makeText(this, c.getString(1),Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        db.close();
     }
 
 

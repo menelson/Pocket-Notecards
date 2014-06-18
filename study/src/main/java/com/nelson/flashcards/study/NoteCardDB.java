@@ -96,6 +96,12 @@ public class NoteCardDB {
                 KEY_CARDNAME + "=\"" + title +"\"", null, null, null, null, null);
     }
 
+    public Cursor getNoteCardTitles() {
+        return db.query(true, DATABASE_TABLE,
+                new String[] {KEY_ROWID, KEY_CARDNAME, KEY_QUESTION, KEY_ANSWER, KEY_ANSWER},
+                null, null, KEY_CARDNAME, null, null, null);
+    }
+
     //Get one Record
     public Cursor getRecord(long rowId) throws SQLException {
         Cursor qCursor = db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_CARDNAME,
