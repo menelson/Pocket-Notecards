@@ -25,13 +25,15 @@ public class NoteCard extends ActionBarActivity {
     private static final int SWIPE_VELOCITY_THRESHOLD = 20;
 
     private int size, index, previous;
-    protected ArrayList<Card> noteCards = new ArrayList<Card>();
+
+    protected ArrayList<String> questions = new ArrayList<String>();
+    protected ArrayList<String> answers = new ArrayList<String>();
+    protected ArrayList<Integer> known = new ArrayList<Integer>();
 
     NoteCardDB db = new NoteCardDB(this);
     Random randomNum = new Random();
     GestureDetectorCompat gestDetector;
     TextView mainDisplay;
-    //String title;
 
 
     @Override
@@ -39,25 +41,11 @@ public class NoteCard extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
+        //MotionEvent one;
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
-        //*************************
-        //String title = "Multiplication";
-        String title = "Spanish";//Change to take intent var
-        //*************************
-        loadData(title);
-        index = 0;
-        size = noteCards.size();
+        loadData();
+        size = questions.size();
         randomNum = new Random(size);
-
-        db.open();
-        Cursor c = db.getNoteCardTitles();
-        if (c.moveToFirst()) {
-            while (c.moveToNext()) {
-                Toast.makeText(this, c.getString(1),Toast.LENGTH_SHORT).show();
-
-            }
-        }
-        db.close();
     }
 
 
@@ -75,17 +63,13 @@ public class NoteCard extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.question_add:
-                displayPopUp("Subject: " + noteCards.get(index).getTitle(),
-                        "Enter the Question","Enter the Answer", 1 );
+                displayPopUp("Add a Question and Answer","Enter the Question","Enter the Answer", 1 );
                 break;
             case R.id.question_edit:
-                displayPopUp("Subject: " + noteCards.get(index).getTitle(),
-                        noteCards.get(index).getQuestion()
-                        ,noteCards.get(index).getAnswer(), 2);
+                displayPopUp("Edit a Question and Answer",questions.get(index),answers.get(index), 2);
                 break;
             case R.id.question_delete:
-                displayPopUp("Delete this Question and Answer",noteCards.get(index).getQuestion()
-                        ,noteCards.get(index).getAnswer(), 3);
+                displayPopUp("Delete this Question and Answer",questions.get(index),answers.get(index), 3);
                 break;
             default:
                 break;
@@ -93,14 +77,14 @@ public class NoteCard extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadData(String title){
-        Card card;
+    public void loadData(){
         db.open();
-        Cursor c = db.getAllRecords(title);
+        Cursor c = db.getAllRecords();
         if (c.moveToFirst()){
             while(c.moveToNext()){
-                card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getInt(4));
-                noteCards.add(card);
+                questions.add(c.getString(1));
+                answers.add(c.getString(2));
+                known.add(c.getInt(3));
             }
         }
         db.close();
@@ -125,7 +109,7 @@ public class NoteCard extends ActionBarActivity {
         aText.setText(aPrompt);
         linLayout.addView(aText);
         final EditText answerEdit = new EditText(this);
-        answerEdit.setHint(aPrompt);
+        answerEdit.setText(aPrompt);
         linLayout.addView(answerEdit);
         popUp.setView(linLayout);
 
@@ -135,26 +119,15 @@ public class NoteCard extends ActionBarActivity {
 
                 switch (addDelUp) {
                     case 1:
-                        addQuestion(noteCards.get(index).getTitle(),
-                                questEdit.getText().toString(),
-                                answerEdit.getText().toString(), 0);
+                        addQuestion(questions.get(index), answers.get(index), known.get(index));
                         Toast.makeText(getApplicationContext(), "Added", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Card tmpCard = new Card(noteCards.get(index).getRowId(),
-                                noteCards.get(index).getTitle(),
-                                noteCards.get(index).getQuestion(),
-                                noteCards.get(index).getAnswer(),
-                                noteCards.get(index).getKnown());
-                        tmpCard.setQuestion(questEdit.getText().toString());
-                        tmpCard.setAnswer(answerEdit.getText().toString());
-                        tmpCard.setKnown(0);
-                        editQuestion(tmpCard.getRowId(), tmpCard.getTitle(), tmpCard.getQuestion(),
-                                tmpCard.getAnswer(), tmpCard.getKnown());
-                        Toast.makeText(getApplicationContext(), "Updated" + tmpCard, Toast.LENGTH_SHORT).show();
+                        editQuestion((long)index, questions.get(index), answers.get(index), known.get(index));
+                        Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        deleteQuestion(noteCards.get(index).getRowId());
+                        deleteQuestion((long)index);
                         Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -173,28 +146,34 @@ public class NoteCard extends ActionBarActivity {
         popUp.show();
     }
 
-    public void addQuestion (String t, String q, String a, int k) {
+    public void addQuestion (String q, String a, int k) {
         db.open();
-        long i = db.insertRecord(t, q, a, k);
+        db.insertRecord(q, a, k);
         db.close();
-        Card newCard = new Card((int)i, t, q, a, k);
-        noteCards.add(newCard);
+        questions.add(q);
+        answers.add(a);
+        known.add(0);
         size++;
     }
 
-    public void editQuestion (int idx, String t, String q, String a, int k) {
-        Card newCard = new Card(idx, t, q, a, k);
+    public void editQuestion (long idx, String q, String a, int k) {
+        idx += 1;
         db.open();
-        db.updateRecord(idx, t, q, a ,k);
+        db.updateRecord(idx, q, a ,k);
         db.close();
-        noteCards.set(index, newCard);
+        questions.set(index, q);
+        answers.set(index, a);
+        known.set(index, k);
     }
 
     public void deleteQuestion (long idx) {
+        idx += 1;
         db.open();
         db.deleteRecord(idx);
         db.close();
-        noteCards.remove(index);
+        questions.remove(index);
+        answers.remove(index);
+        known.remove(index);
         size--;
     }
 
@@ -206,25 +185,25 @@ public class NoteCard extends ActionBarActivity {
 
     //Reveals answer to the Note Card
     public void onSwipeTop() {
-       mainDisplay.setText(noteCards.get(index).getAnswer());
+       mainDisplay.setText(answers.get(index));
     }
 
     //Goes back to the question on the Note Card
     public void onSwipeBottom() {
-        mainDisplay.setText(noteCards.get(index).getQuestion());
+        mainDisplay.setText(questions.get(index));
     }
 
     //Randomly goes to the next Note Card based on a Num Generator
     public void onSwipeLeft() {
         previous = index;
         index = randomNum.nextInt(size);
-        mainDisplay.setText(noteCards.get(index).getQuestion());
+       mainDisplay.setText(questions.get(index));
     }
 
     public void onSwipeRight() {
         //Goes back to only one previous card
         index = previous;
-        mainDisplay.setText(noteCards.get(index).getQuestion());
+        mainDisplay.setText(questions.get(index));
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
