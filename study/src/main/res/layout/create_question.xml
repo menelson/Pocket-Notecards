@@ -15,31 +15,26 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="25dp"
         android:text="@string/deckName"
-        android:textSize="30sp"
+        android:textSize="25sp"
         tools:context=".CreateQuestion" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/title_edit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="12dp"
+        android:layout_below="@id/textView1"
         android:ems="15"
-        android:hint="@string/deckName" >
-
-        <requestFocus />
-    </EditText>
+        android:hint="Subject Title" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_below="@+id/editText1"
-        android:layout_marginLeft="10dp"
+        android:layout_alignLeft="@+id/title_edit"
+        android:layout_below="@+id/title_edit"
         android:layout_marginTop="20dp"
-        android:textSize="30sp"
+        android:layout_marginLeft="10sp"
+        android:textSize="25sp"
         android:text="@string/question"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
