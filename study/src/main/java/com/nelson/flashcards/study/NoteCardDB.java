@@ -17,6 +17,7 @@ import java.util.Currency;
 public class NoteCardDB {
 
     public static final String KEY_ROWID = "id";
+    public static final String KEY_CARDNAME = "card_name";
     public static final String KEY_QUESTION = "question";
     public static final String KEY_ANSWER = "answer";
     public static final String KEY_KNOWN = "known";
@@ -26,9 +27,9 @@ public class NoteCardDB {
     private static final String DATABASE_TABLE = "Multiplication";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_CREATE =
+    private static final String DATABASE_CREATE_NOTECARD =
             " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
-            + "question VARCHAR not null, answer VARCHAR, known INTEGER );";
+            + "card_name VARCHAR not null, question VARCHAR not null, answer VARCHAR, known INTEGER );";
 
     private final Context context;
 
@@ -49,7 +50,7 @@ public class NoteCardDB {
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
-                db.execSQL(DATABASE_CREATE);
+                db.execSQL(DATABASE_CREATE_NOTECARD);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -76,8 +77,9 @@ public class NoteCardDB {
     }
 
     //Insert Questions and Answers
-    public long insertRecord (String question, String answer, int known) {
+    public long insertRecord (String cardName, String question, String answer, int known) {
         ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_CARDNAME, cardName);
         initialValues.put(KEY_QUESTION, question);
         initialValues.put(KEY_ANSWER, answer);
         initialValues.put(KEY_KNOWN, known);
@@ -89,14 +91,20 @@ public class NoteCardDB {
         return db.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
-    public Cursor getAllRecords() {
-        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_QUESTION, KEY_ANSWER, KEY_ANSWER},
-                null, null, null, null, null, null);
+    public Cursor getAllRecords(String title) {
+        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_CARDNAME, KEY_QUESTION, KEY_ANSWER, KEY_ANSWER},
+                KEY_CARDNAME + "=\"" + title +"\"", null, null, null, null, null);
+    }
+
+    public Cursor getNoteCardTitles() {
+        return db.query(true, DATABASE_TABLE,
+                new String[] {KEY_ROWID, KEY_CARDNAME, KEY_QUESTION, KEY_ANSWER, KEY_ANSWER},
+                null, null, KEY_CARDNAME, null, null, null);
     }
 
     //Get one Record
     public Cursor getRecord(long rowId) throws SQLException {
-        Cursor qCursor = db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
+        Cursor qCursor = db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_CARDNAME,
             KEY_QUESTION, KEY_ANSWER, KEY_KNOWN}, KEY_ROWID + "=" + rowId, null,
                 null, null, null, null);
         if(qCursor != null) {
@@ -106,13 +114,15 @@ public class NoteCardDB {
     }
 
     //Update one record
-    public boolean updateRecord(long rowId, String question, String answer, int known) {
+    public boolean updateRecord(long rowId, String cardName, String question, String answer, int known) {
         ContentValues newValues = new ContentValues();
+        newValues.put(KEY_CARDNAME, cardName);
         newValues.put(KEY_QUESTION, question);
         newValues.put(KEY_ANSWER, answer);
         newValues.put(KEY_KNOWN, known);
         return db.update(DATABASE_TABLE, newValues, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
 
 
 }
