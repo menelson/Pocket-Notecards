@@ -43,10 +43,9 @@ public class CardSettings extends Activity {
         deckArrayList.add(deck4);
         deckArrayList.add(deck5);
 
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1,deckArrayList);
         listView.setAdapter(adapter);
-
-
 
     }
 
