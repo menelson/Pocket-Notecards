@@ -19,12 +19,6 @@ public class Welcome extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Welcome.this.startActivity(new Intent(Welcome.this, NoteCard.class));
-            }
-        });
     }
 
 

@@ -4,12 +4,237 @@
     android:layout_height="match_parent" 
     >
 
-    <ListView
-        android:id="@+id/settings_list"
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/deck1"
+        android:textSize="18sp"
+        tools:context=".CardSettings" />
+    
+    <TextView
+        android:id="@+id/promptText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/textView1"
+        android:text="@string/fileSelect"
+        android:textSize="15sp"
+         />
+    
+    <TextView 
+        android:id="@+id/fontSize1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/promptText"
+        android:text="@string/selectFont"
+        android:textSize="15sp"/>
+
+    <Spinner
+        android:id="@+id/spinner1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_alignBottom="@+id/promptText"
+        android:layout_toRightOf="@+id/promptText"
+        android:layout_marginLeft="70dp"
+         />
 
-        </ListView>
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinner1"
+        android:layout_alignBottom="@+id/fontSize1" />
+    
+    <TextView
+        android:id="@+id/textDeck2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fontSize1"        
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/deck2"
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/promptText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/textDeck2"
+        android:text="@string/fileSelect"
+        android:textSize="15sp"
+         />
+    
+    <TextView 
+        android:id="@+id/fontSize2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/promptText2"
+        android:text="@string/selectFont"
+        android:textSize="15sp"/>
+    
+    <Spinner
+        android:id="@+id/spinDeck2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/promptText2"
+        android:layout_toRightOf="@+id/promptText2"
+        android:layout_marginLeft="70dp"/>
+
+    <Spinner
+        android:id="@+id/spinFont2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinDeck2"
+        android:layout_alignBottom="@+id/fontSize2" />
+    
+    <TextView
+        android:id="@+id/textDeck3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fontSize2"        
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/deck3"
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/promptText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/textDeck3"
+        android:text="@string/fileSelect"
+        android:textSize="15sp"
+         />
+    
+    <TextView 
+        android:id="@+id/fontSize3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/promptText3"
+        android:text="@string/selectFont"
+        android:textSize="15sp"/>
+    
+    <Spinner
+        android:id="@+id/spinDeck3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/promptText3"
+        android:layout_toRightOf="@+id/promptText3"
+        android:layout_marginLeft="70dp" />
+
+    <Spinner
+        android:id="@+id/spinFont3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinDeck3"
+        android:layout_alignBottom="@+id/fontSize3" />
+    
+     <TextView
+        android:id="@+id/textDeck4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fontSize3"        
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/deck4"
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/promptText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/textDeck4"
+        android:text="@string/fileSelect"
+        android:textSize="15sp"
+         />
+    
+    <TextView 
+        android:id="@+id/fontSize4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/promptText4"
+        android:text="@string/selectFont"
+        android:textSize="15sp"/>
+    
+    <Spinner
+        android:id="@+id/spinDeck4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/promptText4"
+        android:layout_toRightOf="@+id/promptText4"
+        android:layout_marginLeft="70dp" />
+
+    <Spinner
+        android:id="@+id/spinFont4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinDeck4"
+        android:layout_alignBottom="@+id/fontSize4" />
+    
+    <TextView
+        android:id="@+id/textDeck5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fontSize4"        
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/deck5"
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/promptText5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/textDeck5"
+        android:text="@string/fileSelect"
+        android:textSize="15sp"
+         />
+    
+    <TextView 
+        android:id="@+id/fontSize5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/promptText5"
+        android:text="@string/selectFont"
+        android:textSize="15sp"/>
+    
+    <Spinner
+        android:id="@+id/spinDeck5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/promptText5"
+        android:layout_toRightOf="@+id/promptText5"
+        android:layout_marginLeft="70dp" />
+
+    <Spinner
+        android:id="@+id/spinFont5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/spinDeck5"
+        android:layout_alignBottom="@+id/fontSize5" />
 
 </RelativeLayout>
