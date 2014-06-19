@@ -21,15 +21,23 @@ public class NoteCardDB {
     public static final String KEY_QUESTION = "question";
     public static final String KEY_ANSWER = "answer";
     public static final String KEY_KNOWN = "known";
+    public static final String KEY_DECKNAME = "deck_name"; //Subject for each note card topic
+    public static final String KEY_FONTSIZE = "font_size";
     private static final String TAG = "NoteCardDB";
 
     private static final String DATABASE_NAME = "NoteCards";
-    private static final String DATABASE_TABLE = "Multiplication";
+    private static final String DATABASE_TABLE = "Flash Cards";
+    private static final String DB_SETTINGS_TABLE = "Settings";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE_NOTECARD =
             " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
             + "card_name VARCHAR not null, question VARCHAR not null, answer VARCHAR, known INTEGER );";
+
+    private static final String DATABASE_CREATE_CARD_SETTINGS =
+            " create table if not exists " + DB_SETTINGS_TABLE + " ( " + KEY_ROWID
+                    + " integer primary key autoincrement, " + KEY_DECKNAME + " VARCHAR, "
+                    + KEY_FONTSIZE + " INTEGER );";
 
     private final Context context;
 
@@ -51,6 +59,7 @@ public class NoteCardDB {
         public void onCreate(SQLiteDatabase db) {
             try {
                 db.execSQL(DATABASE_CREATE_NOTECARD);
+                db.execSQL(DATABASE_CREATE_CARD_SETTINGS);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -122,6 +131,40 @@ public class NoteCardDB {
         newValues.put(KEY_KNOWN, known);
         return db.update(DATABASE_TABLE, newValues, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
+    //Methods for interacting with the Settings Table
+    //Insert Settings info
+    public long insertSettings(String deckName, int fontSize) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_DECKNAME, deckName);
+        initialValues.put(KEY_FONTSIZE, fontSize);
+        return db.insert(DB_SETTINGS_TABLE, null, initialValues);
+    }
+
+    public boolean updateSettingsRecord(long rowId, String deckName, int fontSize) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_DECKNAME, deckName);
+        newValues.put(KEY_FONTSIZE, fontSize);
+        return db.update(DB_SETTINGS_TABLE, newValues, KEY_ROWID + "=" + rowId, null) > 0;
+    }
+
+    public Cursor getSettingsRecord(long rowId) {
+        Cursor cursor = db.query(true, DB_SETTINGS_TABLE,
+                new String[] {KEY_ROWID, KEY_DECKNAME, KEY_FONTSIZE},
+                KEY_ROWID + "=" + rowId, null, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getAllSettings(){
+        return db.query(true, DB_SETTINGS_TABLE,
+                new String[] {KEY_ROWID, KEY_DECKNAME, KEY_FONTSIZE},
+                null, null, null, null, null, null, null);
+    }
+
+
 
 
 
