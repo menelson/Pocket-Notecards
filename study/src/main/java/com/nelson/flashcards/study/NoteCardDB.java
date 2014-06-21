@@ -26,7 +26,7 @@ public class NoteCardDB {
     private static final String TAG = "NoteCardDB";
 
     private static final String DATABASE_NAME = "NoteCards";
-    private static final String DATABASE_TABLE = "Flash Cards";
+    private static final String DATABASE_TABLE = "FlashCards";
     private static final String DB_SETTINGS_TABLE = "Settings";
     private static final int DATABASE_VERSION = 1;
 

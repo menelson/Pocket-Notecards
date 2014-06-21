@@ -27,9 +27,10 @@ public class CardSettings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_settings);
         ListView listView = (ListView)findViewById(R.id.settings_list);
+        NoteCardDB db = new NoteCardDB(this);
 
         Deck deck1 = new Deck(1, "Multiplication", 22);
-        Deck deck2 = new Deck(2, "Spanish", 24);
+        Deck deck2 = new Deck(2, "null", 24);
         Deck deck3 = new Deck(3, "Java", 26);
         Deck deck4 = new Deck(4, "Programming", 27);
         Deck deck5 = new Deck(5, "Music", 28);
@@ -55,7 +56,7 @@ public class CardSettings extends Activity {
 
     }
 
-    public void displaySettings(Deck deck) {
+    public void displaySettings(final Deck deck) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -69,7 +70,7 @@ public class CardSettings extends Activity {
         for (int i = 0; i < subjects.length; i++) {
             subjectList.add(subjects[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, subjectList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -80,7 +81,7 @@ public class CardSettings extends Activity {
         linearLayout.addView(fontText);
 
         //Setting up Font Sizes
-        Spinner textSpinner = new Spinner(this);
+        final Spinner textSpinner = new Spinner(this);
         ArrayList<Float> fontSize = new ArrayList<Float>();
         float [] fonts = new float [10];
         float defaultFont = 16;
@@ -95,21 +96,24 @@ public class CardSettings extends Activity {
         textSpinner.setAdapter(adapterFont);
         linearLayout.addView(textSpinner);
         dialog.setView(linearLayout);
+        deck.setDeckSubject(spinner.getSelectedItem().toString());
+        String tmpFontSize = textSpinner.getSelectedItem().toString();
+        deck.setFontSize((int)Float.parseFloat(tmpFontSize));
         dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                NoteCardDB db = new NoteCardDB(getBaseContext());
+                //db.updateSettingsRecord(deck.getRowId(), deck.getDeckSubject(), deck.getFontSize());
+                db.insertSettings(deck.getDeckSubject(), deck.getFontSize());
             }
         });
         dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                //Returns to activity
             }
         });
-
         dialog.show();
-
     }
 
 
