@@ -20,34 +20,34 @@
         android:textSize="18sp"      />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/deck1"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:onClick="launchNoteCard"
-        android:text="@string/deck1" />
+         />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/deck2"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/deck1"
+        android:layout_below="@+id/deck1"
         android:layout_marginTop="2dp"
-        android:onClick="launchDeckTwo"
-        android:text="@string/deck2" />
+
+        android:onClick="launchNoteCard"/>
 
     <Button
         android:id="@+id/deck3"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_below="@+id/button2"
+        android:layout_alignLeft="@+id/deck2"
+        android:layout_below="@+id/deck2"
         android:layout_marginTop="2dp"
-        android:onClick="launchDeckThree"
-        android:text="@string/deck3" />
+
+        android:onClick="launchNoteCard"/>
 
     <Button
         android:id="@+id/deck4"
@@ -56,8 +56,8 @@
         android:layout_alignLeft="@+id/deck3"
         android:layout_below="@+id/deck3"
         android:layout_marginTop="2dp"
-        android:onClick="launchDeckFour"
-        android:text="@string/deck4" />
+
+        android:onClick="launchNoteCard"/>
 
     <Button
         android:id="@+id/deck5"
@@ -66,7 +66,7 @@
         android:layout_alignLeft="@+id/deck4"
         android:layout_below="@+id/deck4"
         android:layout_marginTop="2dp"
-        android:onClick="launchDeckFive"
-        android:text="@string/deck5" />
+
+        android:onClick="launchNoteCard"/>
 
 </RelativeLayout>

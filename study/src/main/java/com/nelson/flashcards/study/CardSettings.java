@@ -21,21 +21,23 @@ import android.widget.*;
 
 
 public class CardSettings extends Activity {
+    NoteCardDB db = new NoteCardDB(this);
+    Deck deck1 = new Deck(1, "Multiplication", 22);
+    Deck deck2 = new Deck(2, "null", 24);
+    Deck deck3 = new Deck(3, "Java", 26);
+    Deck deck4 = new Deck(4, "Programming", 27);
+    Deck deck5 = new Deck(5, "Music", 28);
+
+    ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
+
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_settings);
         ListView listView = (ListView)findViewById(R.id.settings_list);
-        NoteCardDB db = new NoteCardDB(this);
-
-        Deck deck1 = new Deck(1, "Multiplication", 22);
-        Deck deck2 = new Deck(2, "null", 24);
-        Deck deck3 = new Deck(3, "Java", 26);
-        Deck deck4 = new Deck(4, "Programming", 27);
-        Deck deck5 = new Deck(5, "Music", 28);
-
-        final ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
 
         deckArrayList.add(deck1);
         deckArrayList.add(deck2);
@@ -43,20 +45,38 @@ public class CardSettings extends Activity {
         deckArrayList.add(deck4);
         deckArrayList.add(deck5);
 
+
+
+
+
+
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                displaySettings(deckArrayList.get(position));
+                Deck deck = displaySettings(deckArrayList.get(position), adapter, view);
+                //deckArrayList.set(position, deck);
+                //adapter.notifyDataSetChanged();
+                //view.getRootView();
+                //long id2 = db.insertSettings("Test", 2);
+
             }
         });
+        Toast.makeText(this, deck1.getDeckSubject(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, deck1.getFontSize(),Toast.LENGTH_LONG).show();
+
 
 
     }
 
-    public void displaySettings(final Deck deck) {
+    public void updateSettings(Deck deck) {
+        NoteCardDB db = new NoteCardDB(this);
+        db.insertSettings(deck.getDeckSubject(), deck.getFontSize());
+    }
+
+    public Deck displaySettings(Deck deck, ArrayAdapter adapter, View view) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -70,10 +90,10 @@ public class CardSettings extends Activity {
         for (int i = 0; i < subjects.length; i++) {
             subjectList.add(subjects[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, subjectList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(subjectAdapter);
         linearLayout.addView(spinner);
 
         TextView fontText = new TextView(this);
@@ -102,18 +122,16 @@ public class CardSettings extends Activity {
         dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                NoteCardDB db = new NoteCardDB(getBaseContext());
-                //db.updateSettingsRecord(deck.getRowId(), deck.getDeckSubject(), deck.getFontSize());
-                db.insertSettings(deck.getDeckSubject(), deck.getFontSize());
-            }
-        });
-        dialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Returns to activity
+                //adapter.notifyDataSetChanged();
+                //view.setAlpha(1);
+                //Toast.makeText(this, "Deck: " + deck, Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
+
+
+        return deck;
+
     }
 
 

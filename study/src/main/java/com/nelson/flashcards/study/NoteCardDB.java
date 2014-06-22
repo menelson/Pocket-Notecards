@@ -158,11 +158,11 @@ public class NoteCardDB {
         return cursor;
     }
 
-    public Cursor getAllSettings(){
+    /*public Cursor getAllSettings(){
         return db.query(true, DB_SETTINGS_TABLE,
                 new String[] {KEY_ROWID, KEY_DECKNAME, KEY_FONTSIZE},
                 null, null, null, null, null, null, null);
-    }
+    }*/
 
 
 
