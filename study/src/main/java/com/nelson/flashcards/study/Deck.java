@@ -4,8 +4,8 @@ package com.nelson.flashcards.study;
  * Created by Mike on 6/18/14.
  */
 public class Deck {
-    private int rowId, fontSize;
-    private String deckSubject;
+    protected int rowId, fontSize;
+    protected String deckSubject;
 
     public Deck(int rowId, String deckSubject, int fontSize) {
         this.rowId = rowId;

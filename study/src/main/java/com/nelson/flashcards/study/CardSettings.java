@@ -29,9 +29,9 @@ public class CardSettings extends Activity {
     Deck deck5 = new Deck(5, "Music", 28);
 
     ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
-
-
-
+    ArrayList<Float> fontSize = new ArrayList<Float>();
+    float [] fonts = new float [10];
+    float defaultFont = 16;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +45,12 @@ public class CardSettings extends Activity {
         deckArrayList.add(deck4);
         deckArrayList.add(deck5);
 
-
-
-
-
+        for(int i = 0; i < 10; i++)
+        {
+            fontSize.add(defaultFont);
+            fonts[i] = defaultFont;
+            defaultFont+=4;
+        }
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
         listView.setAdapter(adapter);
@@ -56,27 +58,23 @@ public class CardSettings extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Deck deck = displaySettings(deckArrayList.get(position), adapter, view);
-                //deckArrayList.set(position, deck);
+                displaySettings(deckArrayList.get(position), position);
                 //adapter.notifyDataSetChanged();
                 //view.getRootView();
-                //long id2 = db.insertSettings("Test", 2);
-
+                adapter.notifyDataSetInvalidated();
+                view.setAlpha(1);
             }
         });
-        Toast.makeText(this, deck1.getDeckSubject(),Toast.LENGTH_LONG).show();
-        Toast.makeText(this, deck1.getFontSize(),Toast.LENGTH_LONG).show();
-
-
 
     }
 
     public void updateSettings(Deck deck) {
-        NoteCardDB db = new NoteCardDB(this);
-        db.insertSettings(deck.getDeckSubject(), deck.getFontSize());
+        db.open();
+        db.updateSettingsRecord(deck.getRowId(), deck.getDeckSubject(), deck.getFontSize());
+        db.close();
     }
 
-    public Deck displaySettings(Deck deck, ArrayAdapter adapter, View view) {
+    public void displaySettings(Deck deck, final int position) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -84,7 +82,9 @@ public class CardSettings extends Activity {
         TextView subjectText = new TextView(this);
         subjectText.setText("Change Note Card Subject: ");
         linearLayout.addView(subjectText);
-        Spinner spinner = new Spinner(this);
+
+        final Spinner spinner = new Spinner(this);
+
         String [] subjects = {"Multiplication", "Spanish", "Java", "Programming", "Music"};
         ArrayList<String> subjectList = new ArrayList<String>();
         for (int i = 0; i < subjects.length; i++) {
@@ -94,44 +94,41 @@ public class CardSettings extends Activity {
                 android.R.layout.simple_spinner_item, subjectList);
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(subjectAdapter);
+
         linearLayout.addView(spinner);
 
         TextView fontText = new TextView(this);
         fontText.setText("Change Font Size: ");
         linearLayout.addView(fontText);
-
-        //Setting up Font Sizes
-        final Spinner textSpinner = new Spinner(this);
-        ArrayList<Float> fontSize = new ArrayList<Float>();
-        float [] fonts = new float [10];
-        float defaultFont = 16;
-        for(int i = 0; i < 10; i++)
-        {
-            fontSize.add(defaultFont);
-            fonts[i] = defaultFont;
-            defaultFont+=4;
-        }
+        final Spinner fontSpinner = new Spinner(this);
         ArrayAdapter<Float> adapterFont = new ArrayAdapter<Float> (this, android.R.layout.simple_spinner_item, fontSize);
         adapterFont.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        textSpinner.setAdapter(adapterFont);
-        linearLayout.addView(textSpinner);
+        fontSpinner.setAdapter(adapterFont);
+
+        linearLayout.addView(fontSpinner);
         dialog.setView(linearLayout);
-        deck.setDeckSubject(spinner.getSelectedItem().toString());
-        String tmpFontSize = textSpinner.getSelectedItem().toString();
-        deck.setFontSize((int)Float.parseFloat(tmpFontSize));
+
         dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //adapter.notifyDataSetChanged();
-                //view.setAlpha(1);
-                //Toast.makeText(this, "Deck: " + deck, Toast.LENGTH_SHORT).show();
+                String subject = spinner.getSelectedItem().toString();
+                String fontString = fontSpinner.getSelectedItem().toString();
+                float tmpFont = Float.parseFloat(fontString);
+                Deck tmpDeck = new Deck(deckArrayList.get(position).getRowId(), subject, (int)tmpFont);
+                deckArrayList.set(position, tmpDeck);
+                Toast.makeText(getApplicationContext(), "Deck: " + tmpDeck, Toast.LENGTH_SHORT).show();
+                updateSettings(tmpDeck);
             }
         });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Do nothing
+            }
+        });
+
         dialog.show();
-
-
-        return deck;
-
     }
 
 

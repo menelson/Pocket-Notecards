@@ -26,6 +26,7 @@
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_button"
         android:onClick="launchNoteCard"
          />
 

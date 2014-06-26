@@ -28,16 +28,15 @@ public class NoteCardDB {
     private static final String DATABASE_NAME = "NoteCards";
     private static final String DATABASE_TABLE = "FlashCards";
     private static final String DB_SETTINGS_TABLE = "Settings";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_CREATE_NOTECARD =
             " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
-            + "card_name VARCHAR not null, question VARCHAR not null, answer VARCHAR, known INTEGER );";
+            + "card_name VARCHAR not null, question VARCHAR not null, answer VARCHAR, known INTEGER )";
 
     private static final String DATABASE_CREATE_CARD_SETTINGS =
-            " create table if not exists " + DB_SETTINGS_TABLE + " ( " + KEY_ROWID
-                    + " integer primary key autoincrement, " + KEY_DECKNAME + " VARCHAR, "
-                    + KEY_FONTSIZE + " INTEGER );";
+            " create table if not exists " + DB_SETTINGS_TABLE + " (id integer primary key autoincrement, "
+                    + "deck_name VARCHAR, font_size INTEGER )";
 
     private final Context context;
 
@@ -134,7 +133,7 @@ public class NoteCardDB {
 
     //Methods for interacting with the Settings Table
     //Insert Settings info
-    public long insertSettings(String deckName, int fontSize) {
+    public long insertSettings (String deckName, int fontSize) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_DECKNAME, deckName);
         initialValues.put(KEY_FONTSIZE, fontSize);

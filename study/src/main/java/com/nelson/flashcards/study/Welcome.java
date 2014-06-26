@@ -1,7 +1,9 @@
 package com.nelson.flashcards.study;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,12 +23,16 @@ public class Welcome extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        Resources res = getResources();
+        Drawable shape = res.getDrawable(R.drawable.rounded_button);
 
         deck1 = (Button)findViewById(R.id.deck1);
         deck2 = (Button)findViewById(R.id.deck2);
         deck3 = (Button)findViewById(R.id.deck3);
         deck4 = (Button)findViewById(R.id.deck4);
         deck5 = (Button)findViewById(R.id.deck5);
+
+        deck2.setBackground(shape);
 
         Button [] buttons = {deck1, deck2, deck3, deck4, deck5};
 
