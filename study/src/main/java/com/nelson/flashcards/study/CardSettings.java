@@ -27,6 +27,7 @@ public class CardSettings extends Activity {
     Deck deck3 = new Deck(3, "Java", 26);
     Deck deck4 = new Deck(4, "Programming", 27);
     Deck deck5 = new Deck(5, "Music", 28);
+    Deck defaultDeck;
 
     ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
     ArrayList<Float> fontSize = new ArrayList<Float>();
@@ -72,6 +73,10 @@ public class CardSettings extends Activity {
         db.open();
         db.updateSettingsRecord(deck.getRowId(), deck.getDeckSubject(), deck.getFontSize());
         db.close();
+    }
+
+    public void initializeSettings() {
+
     }
 
     public void displaySettings(Deck deck, final int position) {

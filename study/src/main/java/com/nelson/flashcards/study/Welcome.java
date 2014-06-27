@@ -36,9 +36,6 @@ public class Welcome extends ActionBarActivity {
 
         Button [] buttons = {deck1, deck2, deck3, deck4, deck5};
 
-        //subjectArray[0] = "Multiplication";
-        //subjectArray[1] = "Java";
-        //subjectArray[2] = "Spanish";
         initializeSubjectArray();
         setButtonNames(buttons, subjectArray);
     }
@@ -76,7 +73,6 @@ public class Welcome extends ActionBarActivity {
     }
 
     //Go to Settings
-    //Null Pointer Exception
     public void launchSettings(MenuItem item) {
         Intent intentSettings = new Intent(this, CardSettings.class);
         startActivity(intentSettings);
@@ -115,22 +111,17 @@ public class Welcome extends ActionBarActivity {
         String subject = null;
         db.open();
         Cursor cursor = db.getSettingsRecord(rowID);
-        if(cursor == null)
-            subject = "Not Assigned";
-        else {
             if (cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
                     subject = cursor.getString(1);
-                }
             }
-        }
+        db.close();
         return subject;
     }
 
     public void setButtonNames(Button [] buttons, String [] subjectArray) {
         for(int i = 0; i < subjectArray.length; i++) {
             if(subjectArray[i] == null) {
-                buttons[i].setText("Not Working");
+                buttons[i].setText("Not Assigned");
             } else {
                 buttons[i].setText(subjectArray[i]);
             }
@@ -138,8 +129,10 @@ public class Welcome extends ActionBarActivity {
     }
 
     public void initializeSubjectArray(){
-        for(int i = 0; i < 5; i++)
-            subjectArray[i] = getNoteCardSubject((long)i+1);
+        for(int i = 0; i < 5; i++) {
+            long tmpRowId = i + 1;
+            subjectArray[i] = getNoteCardSubject(tmpRowId);
+        }
     }
 
 
