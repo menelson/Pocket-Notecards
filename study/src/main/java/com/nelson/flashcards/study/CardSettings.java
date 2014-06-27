@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -22,13 +23,6 @@ import android.widget.*;
 
 public class CardSettings extends Activity {
     NoteCardDB db = new NoteCardDB(this);
-    Deck deck1 = new Deck(1, "Multiplication", 22);
-    Deck deck2 = new Deck(2, "null", 24);
-    Deck deck3 = new Deck(3, "Java", 26);
-    Deck deck4 = new Deck(4, "Programming", 27);
-    Deck deck5 = new Deck(5, "Music", 28);
-    Deck defaultDeck;
-
     ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
     ArrayList<Float> fontSize = new ArrayList<Float>();
     float [] fonts = new float [10];
@@ -39,19 +33,9 @@ public class CardSettings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_settings);
         ListView listView = (ListView)findViewById(R.id.settings_list);
-
-        deckArrayList.add(deck1);
-        deckArrayList.add(deck2);
-        deckArrayList.add(deck3);
-        deckArrayList.add(deck4);
-        deckArrayList.add(deck5);
-
-        for(int i = 0; i < 10; i++)
-        {
-            fontSize.add(defaultFont);
-            fonts[i] = defaultFont;
-            defaultFont+=4;
-        }
+        initializeSettings();
+        initializeArrayListView();
+        initializeFontSizes();
 
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
         listView.setAdapter(adapter);
@@ -60,8 +44,6 @@ public class CardSettings extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 displaySettings(deckArrayList.get(position), position);
-                //adapter.notifyDataSetChanged();
-                //view.getRootView();
                 adapter.notifyDataSetInvalidated();
                 view.setAlpha(1);
             }
@@ -76,7 +58,33 @@ public class CardSettings extends Activity {
     }
 
     public void initializeSettings() {
+        db.open();
+        for (int i = 1; i < 6; i++) {
+            Cursor cursor = db.getSettingsRecord(i);
+            if(!cursor.moveToFirst()) {
+                db.insertSettings("Not Assigned", 16);
+            }
+        }
+        db.close();
+    }
 
+    public void initializeFontSizes () {
+        for(int i = 0; i < 10; i++)
+        {
+            fontSize.add(defaultFont);
+            fonts[i] = defaultFont;
+            defaultFont+=4;
+        }
+    }
+
+    public void initializeArrayListView () {
+        db.open();
+        for(int i = 1; i < 6; i++) {
+            Cursor cursor = db.getSettingsRecord(i);
+            Deck tmpDeck = new Deck(cursor.getInt(0), cursor.getString(1), cursor.getInt(2));
+            deckArrayList.add(tmpDeck);
+        }
+        db.close();
     }
 
     public void displaySettings(Deck deck, final int position) {
