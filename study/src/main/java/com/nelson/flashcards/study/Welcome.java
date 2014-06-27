@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
 
 
 public class Welcome extends ActionBarActivity {
@@ -100,10 +100,10 @@ public class Welcome extends ActionBarActivity {
             default:
                 break;
         }
-        //Intent intent = new Intent(this, NoteCard.class);
-        //intent.putExtra("Subject", subjectName);
-        //startActivity(intent);
-        Toast.makeText(this,subjectName, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, NoteCard.class);
+        intent.putExtra("Subject", subjectName);
+        startActivity(intent);
+        //Toast.makeText(this,subjectName, Toast.LENGTH_LONG).show();
     }
 
     //Get Stored NoteCard Table Name

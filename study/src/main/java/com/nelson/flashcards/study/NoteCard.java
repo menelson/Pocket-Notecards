@@ -31,7 +31,7 @@ public class NoteCard extends ActionBarActivity {
     Random randomNum = new Random();
     GestureDetectorCompat gestDetector;
     TextView mainDisplay;
-    //String title;
+    String title;
 
 
     @Override
@@ -40,16 +40,13 @@ public class NoteCard extends ActionBarActivity {
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
-        //*************************
-        //String title = "Multiplication";
-        String title = "Spanish";//Change to take intent var
-        //*************************
+        title = getIntent().getExtras().getString("Subject");
         loadData(title);
         index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
 
-        db.open();
+        /*db.open();
         Cursor c = db.getNoteCardTitles();
         if (c.moveToFirst()) {
             while (c.moveToNext()) {
@@ -57,7 +54,7 @@ public class NoteCard extends ActionBarActivity {
 
             }
         }
-        db.close();
+        db.close();*/
     }
 
 
