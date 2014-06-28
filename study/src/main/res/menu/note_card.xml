@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.nelson.flashcards.study.NoteCard" >
 
+    <item android:id="@+id/settings_list"
+        android:title="@string/action_settings"/>
+
     <item android:id="@+id/question_add"
         android:title="@string/add"
         app:showAsAction="never" />

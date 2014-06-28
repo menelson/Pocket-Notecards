@@ -2,6 +2,7 @@ package com.nelson.flashcards.study;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -78,10 +79,19 @@ public class NoteCard extends ActionBarActivity {
                 displayPopUp("Delete this Question and Answer",noteCards.get(index).getQuestion()
                         ,noteCards.get(index).getAnswer(), 3);
                 break;
+            case R.id.settings_list:
+                launchSettings(item);
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Go to Settings
+    public void launchSettings(MenuItem item) {
+        Intent intentSettings = new Intent(this, CardSettings.class);
+        startActivity(intentSettings);
     }
 
     public void loadData(String title){
