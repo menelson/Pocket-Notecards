@@ -6,17 +6,13 @@
 
 package com.nelson.flashcards.study;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.*;
 
@@ -27,6 +23,7 @@ public class CardSettings extends Activity {
     ArrayList<Float> fontSize = new ArrayList<Float>();
     float [] fonts = new float [10];
     float defaultFont = 16;
+    ArrayList<String> subjectList = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,19 @@ public class CardSettings extends Activity {
         db.close();
     }
 
+    //Get Stored NoteCard Table Name
+    public void getUniqueNoteCardSubject() {
+        db.open();
+        Cursor cursor = db.getNoteCardTitles();
+        if (cursor.moveToFirst()) {
+            subjectList.add(cursor.getString(1));
+            while (cursor.moveToNext()) {
+                subjectList.add(cursor.getString(1));
+            }
+        }
+        db.close();
+    }
+
     public void displaySettings(Deck deck, final int position) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LinearLayout linearLayout = new LinearLayout(this);
@@ -98,11 +108,8 @@ public class CardSettings extends Activity {
 
         final Spinner spinner = new Spinner(this);
 
-        String [] subjects = {"Multiplication", "Spanish", "Java", "Programming", "Music"};
-        ArrayList<String> subjectList = new ArrayList<String>();
-        for (int i = 0; i < subjects.length; i++) {
-            subjectList.add(subjects[i]);
-        }
+        getUniqueNoteCardSubject();
+
         ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, subjectList);
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -95,6 +95,8 @@ public class NoteCard extends ActionBarActivity {
         db.open();
         Cursor c = db.getAllRecords(title);
         if (c.moveToFirst()){
+            card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getInt(4));
+            noteCards.add(card);
             while(c.moveToNext()){
                 card = new Card(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getInt(4));
                 noteCards.add(card);

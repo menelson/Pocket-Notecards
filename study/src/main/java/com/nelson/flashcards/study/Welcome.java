@@ -32,7 +32,7 @@ public class Welcome extends ActionBarActivity {
         deck4 = (Button)findViewById(R.id.deck4);
         deck5 = (Button)findViewById(R.id.deck5);
 
-        deck2.setBackground(shape);
+        //deck2.setBackground(shape);
 
         Button [] buttons = {deck1, deck2, deck3, deck4, deck5};
 
