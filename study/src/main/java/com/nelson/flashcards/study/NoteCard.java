@@ -32,6 +32,7 @@ public class NoteCard extends ActionBarActivity {
     GestureDetectorCompat gestDetector;
     TextView mainDisplay;
     String title;
+    int fontSize;
 
 
     @Override
@@ -41,20 +42,13 @@ public class NoteCard extends ActionBarActivity {
         mainDisplay = (TextView)findViewById(R.id.question_text);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         title = getIntent().getExtras().getString("Subject");
+        fontSize = getIntent().getExtras().getInt("Font");
+        mainDisplay.setTextSize(fontSize);
         loadData(title);
         index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
 
-        /*db.open();
-        Cursor c = db.getNoteCardTitles();
-        if (c.moveToFirst()) {
-            while (c.moveToNext()) {
-                Toast.makeText(this, c.getString(1),Toast.LENGTH_SHORT).show();
-
-            }
-        }
-        db.close();*/
     }
 
 

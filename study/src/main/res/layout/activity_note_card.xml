@@ -12,6 +12,7 @@
         android:id="@+id/question_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:text="@string/ready"
         android:gravity="center"/>
 
 </RelativeLayout>

@@ -16,6 +16,7 @@ import android.widget.Button;
 public class Welcome extends ActionBarActivity {
     protected Button deck1, deck2, deck3, deck4, deck5;
     private String [] subjectArray = new String [5];
+    private int [] fontSizeArray = new int [5];
     NoteCardDB db = new NoteCardDB(this);
 
 
@@ -37,6 +38,7 @@ public class Welcome extends ActionBarActivity {
         Button [] buttons = {deck1, deck2, deck3, deck4, deck5};
 
         initializeSubjectArray();
+        initializeFontSizeArray();
         setButtonNames(buttons, subjectArray);
     }
 
@@ -81,27 +83,34 @@ public class Welcome extends ActionBarActivity {
     //Launch NoteCard Activity based on Deck Selected.
     public void launchNoteCard(View view) {
         String subjectName = "";
+        int fontSize = 12;
         switch (view.getId()) {
             case R.id.deck1:
                 subjectName = subjectArray[0];
+                fontSize = fontSizeArray[0];
                 break;
             case R.id.deck2:
                 subjectName = subjectArray[1];
+                fontSize = fontSizeArray[1];
                 break;
             case R.id.deck3:
                 subjectName = subjectArray[2];
+                fontSize = fontSizeArray[2];
                 break;
             case R.id.deck4:
                 subjectName = subjectArray[3];
+                fontSize = fontSizeArray[3];
                 break;
             case R.id.deck5:
                 subjectName = subjectArray[4];
+                fontSize = fontSizeArray[4];
                 break;
             default:
                 break;
         }
         Intent intent = new Intent(this, NoteCard.class);
         intent.putExtra("Subject", subjectName);
+        intent.putExtra("Font", fontSize);
         startActivity(intent);
         //Toast.makeText(this,subjectName, Toast.LENGTH_LONG).show();
     }
@@ -132,6 +141,24 @@ public class Welcome extends ActionBarActivity {
         for(int i = 0; i < 5; i++) {
             long tmpRowId = i + 1;
             subjectArray[i] = getNoteCardSubject(tmpRowId);
+        }
+    }
+
+    public int getFontSize(long rowId) {
+        int fSize = 12;
+        db.open();
+        Cursor cursor = db.getSettingsRecord(rowId);
+        if(cursor.moveToFirst()) {
+            fSize = cursor.getInt(2);
+        }
+        db.close();
+        return fSize;
+    }
+
+    public void initializeFontSizeArray() {
+        for(int i = 0; i < fontSizeArray.length; i++) {
+            long tmpRowId = i + 1;
+            fontSizeArray[i] = getFontSize(tmpRowId);
         }
     }
 
