@@ -24,12 +24,13 @@ public class CardSettings extends Activity {
     float [] fonts = new float [10];
     float defaultFont = 16;
     ArrayList<String> subjectList = new ArrayList<String>();
+    ListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_settings);
-        ListView listView = (ListView)findViewById(R.id.settings_list);
+        listView = (ListView)findViewById(R.id.settings_list);
         initializeSettings();
         initializeArrayListView();
         initializeFontSizes();
@@ -40,12 +41,19 @@ public class CardSettings extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                displaySettings(deckArrayList.get(position), position);
-                adapter.notifyDataSetInvalidated();
+                displaySettings(deckArrayList.get(position), position, adapter,view);
+                adapter.notifyDataSetChanged();
                 view.setAlpha(1);
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
+        listView.setAdapter(adapter);
     }
 
     public void updateSettings(Deck deck) {
@@ -97,7 +105,7 @@ public class CardSettings extends Activity {
         db.close();
     }
 
-    public void displaySettings(Deck deck, final int position) {
+    public void displaySettings(Deck deck, final int position, ArrayAdapter adapter, View view) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -138,6 +146,8 @@ public class CardSettings extends Activity {
                 deckArrayList.set(position, tmpDeck);
                 Toast.makeText(getApplicationContext(), "Deck: " + tmpDeck, Toast.LENGTH_SHORT).show();
                 updateSettings(tmpDeck);
+                refreshView();
+
             }
         });
 
@@ -149,6 +159,15 @@ public class CardSettings extends Activity {
         });
 
         dialog.show();
+        adapter.clear();
+        initializeArrayListView();
+        adapter.addAll(deckArrayList);
+        adapter.notifyDataSetChanged();
+        view.setAlpha(1);
+    }
+
+    public void refreshView() {
+
     }
 
 

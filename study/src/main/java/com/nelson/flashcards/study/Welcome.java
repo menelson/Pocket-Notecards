@@ -14,7 +14,6 @@ import android.widget.Button;
 
 
 public class Welcome extends ActionBarActivity {
-    protected Button deck1, deck2, deck3, deck4, deck5;
     private String [] subjectArray = new String [5];
     private int [] fontSizeArray = new int [5];
     protected NoteCardDB db = new NoteCardDB(this);
@@ -35,9 +34,6 @@ public class Welcome extends ActionBarActivity {
         buttons[4] = (Button)findViewById(R.id.deck5);
 
         //deck2.setBackground(shape);
-
-
-
         initializeSubjectArray();
         initializeFontSizeArray();
         setButtonNames(buttons, subjectArray);
@@ -49,7 +45,6 @@ public class Welcome extends ActionBarActivity {
         initializeSubjectArray();
         setButtonNames(buttons, subjectArray);
     }
-
 
     @Override
         public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,7 +115,6 @@ public class Welcome extends ActionBarActivity {
         intent.putExtra("Subject", subjectName);
         intent.putExtra("Font", fontSize);
         startActivity(intent);
-        //Toast.makeText(this,subjectName, Toast.LENGTH_LONG).show();
     }
 
     //Get Stored NoteCard Table Name
@@ -169,8 +163,4 @@ public class Welcome extends ActionBarActivity {
             fontSizeArray[i] = getFontSize(tmpRowId);
         }
     }
-
-
-
-
 }
