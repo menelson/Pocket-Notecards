@@ -17,7 +17,8 @@ public class Welcome extends ActionBarActivity {
     protected Button deck1, deck2, deck3, deck4, deck5;
     private String [] subjectArray = new String [5];
     private int [] fontSizeArray = new int [5];
-    NoteCardDB db = new NoteCardDB(this);
+    protected NoteCardDB db = new NoteCardDB(this);
+    protected Button [] buttons = new Button [5];
 
 
     @Override
@@ -27,18 +28,25 @@ public class Welcome extends ActionBarActivity {
         Resources res = getResources();
         Drawable shape = res.getDrawable(R.drawable.rounded_button);
 
-        deck1 = (Button)findViewById(R.id.deck1);
-        deck2 = (Button)findViewById(R.id.deck2);
-        deck3 = (Button)findViewById(R.id.deck3);
-        deck4 = (Button)findViewById(R.id.deck4);
-        deck5 = (Button)findViewById(R.id.deck5);
+        buttons[0] = (Button)findViewById(R.id.deck1);
+        buttons[1] = (Button)findViewById(R.id.deck2);
+        buttons[2] = (Button)findViewById(R.id.deck3);
+        buttons[3] = (Button)findViewById(R.id.deck4);
+        buttons[4] = (Button)findViewById(R.id.deck5);
 
         //deck2.setBackground(shape);
 
-        Button [] buttons = {deck1, deck2, deck3, deck4, deck5};
+
 
         initializeSubjectArray();
         initializeFontSizeArray();
+        setButtonNames(buttons, subjectArray);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializeSubjectArray();
         setButtonNames(buttons, subjectArray);
     }
 
