@@ -24,6 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView1"
         android:ems="15"
+        android:background="@drawable/cardtheme_edit_text_holo_dark"
+        android:textColor="@color/off_white"
+        android:textColorHint="@color/off_white"
         android:hint="Subject Title" />
 
     <TextView
@@ -45,6 +48,7 @@
         android:layout_above="@+id/button2"
         android:layout_marginBottom="5dp"
         android:textSize="30sp"
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:text="@string/add" />
 
     <Button
@@ -54,6 +58,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:textSize="30sp"
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:text="@string/finish" />
 
     <EditText
@@ -63,6 +68,9 @@
         android:layout_below="@+id/textView2"
         android:layout_marginTop="10dp"
         android:ems="15"
+        android:background="@drawable/cardtheme_edit_text_holo_dark"
+        android:textColor="@color/off_white"
+        android:textColorHint="@color/off_white"
         android:hint="@string/question" />
 
     <TextView
@@ -83,6 +91,9 @@
         android:layout_below="@+id/textView3"
         android:layout_marginTop="10dp"
         android:ems="15"
+        android:textColor="@color/off_white"
+        android:textColorHint="@color/off_white"
+        android:background="@drawable/cardtheme_edit_text_holo_dark"
         android:hint="@string/answer" />
 
 </RelativeLayout>

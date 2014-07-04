@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.*;
 
@@ -106,12 +107,13 @@ public class CardSettings extends Activity {
     }
 
     public void displaySettings(Deck deck, final int position, ArrayAdapter adapter, View view) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.DialogTheme));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         dialog.setTitle("Subject: " + deck.getDeckSubject());
         TextView subjectText = new TextView(this);
         subjectText.setText("Change Note Card Subject: ");
+        subjectText.setTextColor(getResources().getColor(R.color.black));
         linearLayout.addView(subjectText);
 
         final Spinner spinner = new Spinner(this);
@@ -119,18 +121,21 @@ public class CardSettings extends Activity {
         getUniqueNoteCardSubject();
 
         ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, subjectList);
-        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.edit_dialog, subjectList);
+        subjectAdapter.setDropDownViewResource(R.layout.edit_dialog);
+
         spinner.setAdapter(subjectAdapter);
+
 
         linearLayout.addView(spinner);
 
         TextView fontText = new TextView(this);
         fontText.setText("Change Font Size: ");
+        fontText.setTextColor(getResources().getColor(R.color.black));
         linearLayout.addView(fontText);
-        final Spinner fontSpinner = new Spinner(this);
-        ArrayAdapter<Float> adapterFont = new ArrayAdapter<Float> (this, android.R.layout.simple_spinner_item, fontSize);
-        adapterFont.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final Spinner fontSpinner = new Spinner(new ContextThemeWrapper(this, R.style.DialogTheme));
+        ArrayAdapter<Float> adapterFont = new ArrayAdapter<Float> (this, R.layout.edit_dialog, fontSize);
+        adapterFont.setDropDownViewResource(R.layout.edit_dialog);
         fontSpinner.setAdapter(adapterFont);
 
         linearLayout.addView(fontSpinner);

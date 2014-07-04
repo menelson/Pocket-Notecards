@@ -26,7 +26,7 @@
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:onClick="launchNoteCard"
          />
 
@@ -37,7 +37,7 @@
         android:layout_alignLeft="@+id/deck1"
         android:layout_below="@+id/deck1"
         android:layout_marginTop="2dp"
-
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:onClick="launchNoteCard"/>
 
     <Button
@@ -47,7 +47,7 @@
         android:layout_alignLeft="@+id/deck2"
         android:layout_below="@+id/deck2"
         android:layout_marginTop="2dp"
-
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:onClick="launchNoteCard"/>
 
     <Button
@@ -57,7 +57,7 @@
         android:layout_alignLeft="@+id/deck3"
         android:layout_below="@+id/deck3"
         android:layout_marginTop="2dp"
-
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:onClick="launchNoteCard"/>
 
     <Button
@@ -67,7 +67,7 @@
         android:layout_alignLeft="@+id/deck4"
         android:layout_below="@+id/deck4"
         android:layout_marginTop="2dp"
-
+        android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:onClick="launchNoteCard"/>
 
 </RelativeLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.navigation.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <entry>
+      <key      
+        class = "com.android.navigation.ActivityState"      
+        className = "com.nelson.flashcards.study.NoteCard">
+        <location        
+          id = "point0"        
+          x = "0"        
+          y = "0"/>
+      </key>
+      <value      
+        x = "1600"      
+        y = "2240"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+    <entry>
+      <key      
+        class = "com.android.navigation.ActivityState"      
+        className = "com.nelson.flashcards.study.CreateQuestion">
+        <location        
+          idref = "point0"/>
+      </key>
+      <value      
+        x = "2720"      
+        y = "320"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+    <entry>
+      <key      
+        class = "com.android.navigation.ActivityState"      
+        className = "com.nelson.flashcards.study.Welcome">
+        <location        
+          idref = "point0"/>
+      </key>
+      <value      
+        x = "320"      
+        y = "1120"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+    <entry>
+      <key      
+        class = "com.android.navigation.ActivityState"      
+        className = "com.nelson.flashcards.study.CardSettings">
+        <location        
+          idref = "point0"/>
+      </key>
+      <value      
+        x = "2720"      
+        y = "1760"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+    <entry>
+      <key      
+        class = "com.android.navigation.MenuState"      
+        xmlResourceName = "note_card">
+        <location        
+          idref = "point0"/>
+      </key>
+      <value      
+        x = "2560"      
+        y = "3200"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+    <entry>
+      <key      
+        class = "com.android.navigation.MenuState"      
+        xmlResourceName = "welcome">
+        <location        
+          idref = "point0"/>
+      </key>
+      <value      
+        x = "1920"      
+        y = "1440"      
+        class = "com.android.navigation.Point"/>
+    </entry>
+  </locations>
+</navigationModel>

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,7 +111,7 @@ public class NoteCard extends ActionBarActivity {
     }
 
     public void displayPopUp(String title, String qPrompt, String aPrompt, final int addDelUp){
-        AlertDialog.Builder popUp = new AlertDialog.Builder(this);
+        AlertDialog.Builder popUp = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.DialogTheme));
         LinearLayout linLayout = new LinearLayout(this);
         linLayout.setOrientation(LinearLayout.VERTICAL);
         popUp.setTitle(title);
@@ -118,14 +119,17 @@ public class NoteCard extends ActionBarActivity {
         //TextView and EditText for question add/edit
         TextView qText = new TextView(this);
         qText.setText(qPrompt);
+        qText.setTextColor(getResources().getColor(R.color.black));
         linLayout.addView(qText);
         final EditText questEdit = new EditText(this);
         questEdit.setHint(qPrompt);
+
         linLayout.addView(questEdit);
 
         //TextView and EditText for answer add/edit
         TextView aText = new TextView(this);
         aText.setText(aPrompt);
+        aText.setTextColor(getResources().getColor(R.color.black));
         linLayout.addView(aText);
         final EditText answerEdit = new EditText(this);
         answerEdit.setHint(aPrompt);
