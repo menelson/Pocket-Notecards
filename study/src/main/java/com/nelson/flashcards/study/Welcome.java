@@ -50,7 +50,7 @@ public class Welcome extends ActionBarActivity {
         } else {
             if (!appDirectory.exists()) {
                 appDirectory.mkdir();
-                Toast.makeText(this, "Dir created: " + folder, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Dir created: " + folder, Toast.LENGTH_SHORT).show();
             }
         }
     }

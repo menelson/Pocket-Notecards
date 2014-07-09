@@ -72,8 +72,6 @@ public class ImportFile extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //String test = fileNameArrayList.get(position);
-                //Toast.makeText(getApplicationContext(), test, Toast.LENGTH_SHORT).show();
                 writeFileToDB(fileNameArrayList.get(position), fileArrayList.get(position));
 
             }
@@ -107,7 +105,7 @@ public class ImportFile extends Activity {
     }
 
     public void writeFileToDB(String subject, File file) {
-        FileReader fileReader = new FileReader();
+        ReadFile fileReader = new ReadFile();
         ArrayList<Card> cards = fileReader.importFile(file, subject);
         db.open();
         for(int i = 0; i < cards.size(); i++) {

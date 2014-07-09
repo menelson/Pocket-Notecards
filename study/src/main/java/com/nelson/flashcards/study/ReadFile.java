@@ -1,6 +1,7 @@
 package com.nelson.flashcards.study;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,9 +10,9 @@ import java.util.ArrayList;
 /**
  * Created by Mike on 7/7/14.
  */
-public class FileReader {
+public class ReadFile {
 
-    protected String fileDelimeter = "|";
+    protected String fileDelimeter = "\\|";
 
     public ArrayList<Card> importFile(File file, String title) {
 
@@ -21,15 +22,16 @@ public class FileReader {
 
 
         try {
-            bufferedReader = new BufferedReader(new java.io.FileReader(file));
+            bufferedReader = new BufferedReader(new FileReader(file));
 
-            while(/*(line = */bufferedReader.readLine() != null) {
+            while(bufferedReader.ready()) {
                 line = bufferedReader.readLine();
                 String [] data = line.split(fileDelimeter);
                 Card tmpCard = new Card(0, title, data[0], data[1], 0); //Dummy values for rowID and known
                 noteCards.add(tmpCard);
 
             }
+            bufferedReader.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
