@@ -36,18 +36,15 @@ public class CardSettings extends Activity {
         initializeArrayListView();
         initializeFontSizes();
 
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                displaySettings(deckArrayList.get(position), position, adapter,view);
-                adapter.notifyDataSetChanged();
-                view.setAlpha(1);
+                displaySettings(deckArrayList.get(position), position);
             }
         });
-
     }
 
     @Override
@@ -106,7 +103,7 @@ public class CardSettings extends Activity {
         db.close();
     }
 
-    public void displaySettings(Deck deck, final int position, ArrayAdapter adapter, View view) {
+    public void displaySettings(Deck deck, final int position){
         AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.DialogTheme));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -164,15 +161,10 @@ public class CardSettings extends Activity {
         });
 
         dialog.show();
-        adapter.clear();
-        initializeArrayListView();
-        adapter.addAll(deckArrayList);
-        adapter.notifyDataSetChanged();
-        view.setAlpha(1);
     }
 
     public void refreshView() {
-
+        listView.invalidateViews();
     }
 
 
@@ -181,7 +173,6 @@ public class CardSettings extends Activity {
 		super.onBackPressed();
 		finish();
 	}	
-	
 
 }
 
