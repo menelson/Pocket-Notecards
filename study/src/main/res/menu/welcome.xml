@@ -11,4 +11,7 @@
     <item android:id="@+id/create_cards"
         android:title="@string/create"  />
 
+    <item android:id="@+id/file_import"
+        android:title="@string/import_cards"/>
+
 </menu>

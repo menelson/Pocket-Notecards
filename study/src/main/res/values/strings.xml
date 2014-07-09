@@ -10,7 +10,7 @@
     <string name="deck4">Deck 4</string>
     <string name="deck5">Deck 5</string>
     <string name="welcome">Welcome to Mobile Flash!</string>
-    <string name="ready">Ready? Swipe Right to Left to Begin.</string>
+    <string name="ready">Ready? Swipe Right and Left for Questions, Up and Down for Answers.</string>
     <string name="delete">Delete Question</string>
     <string name="edit">Edit Question</string>
     <string name="file">File Name</string>
@@ -31,5 +31,6 @@
     <string name="selectFont">Select a Font Size</string>
     <string name="known">I know this one</string>
     <string name="title_activity_note_card">NoteCard</string>
+    <string name="import_cards">Import Cards</string>
 
 </resources>

@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import java.io.File;
 
 
 public class Welcome extends ActionBarActivity {
@@ -18,14 +21,17 @@ public class Welcome extends ActionBarActivity {
     private int [] fontSizeArray = new int [5];
     protected NoteCardDB db = new NoteCardDB(this);
     protected Button [] buttons = new Button [5];
+    protected String folder = "PocketNoteCards";
+    protected String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + folder + "/";
+    public File appDirectory = new File(filePath);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        Resources res = getResources();
-        Drawable shape = res.getDrawable(R.drawable.rounded_button);
+        //Resources res = getResources();
+        //Drawable shape = res.getDrawable(R.drawable.rounded_button);
 
         buttons[0] = (Button)findViewById(R.id.deck1);
         buttons[1] = (Button)findViewById(R.id.deck2);
@@ -37,6 +43,16 @@ public class Welcome extends ActionBarActivity {
         initializeSubjectArray();
         initializeFontSizeArray();
         setButtonNames(buttons, subjectArray);
+
+        //Creating a Directory for Application Text files.
+        if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Toast.makeText(this, "External Media Not Mounted", Toast.LENGTH_LONG).show();
+        } else {
+            if (!appDirectory.exists()) {
+                appDirectory.mkdir();
+                Toast.makeText(this, "Dir created: " + folder, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -65,6 +81,8 @@ public class Welcome extends ActionBarActivity {
             case R.id.create_cards:
                 launchCreateQuestion(item);
                 break;
+            case R.id.file_import:
+                launchFileImport(item);
             default:
                 break;
         }
@@ -81,6 +99,11 @@ public class Welcome extends ActionBarActivity {
     public void launchSettings(MenuItem item) {
         Intent intentSettings = new Intent(this, CardSettings.class);
         startActivity(intentSettings);
+    }
+
+    public void launchFileImport(MenuItem item) {
+        Intent intent = new Intent(this, ImportFile.class);
+        startActivity(intent);
     }
 
     //Launch NoteCard Activity based on Deck Selected.
