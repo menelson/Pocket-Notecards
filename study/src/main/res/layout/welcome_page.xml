@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/deck_fragment"
+        android:gravity="center"
+        android:text="@string/study"
+        android:layout_weight="1"
+        android:textSize="35dp"
+        android:onClick="launchStudyActivity"
+        android:clickable="true"
+        android:background="@drawable/textview_border"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/create_fragment"
+        android:gravity="center"
+        android:text="@string/create"
+        android:layout_weight="1"
+        android:onClick="launchCreateActivity"
+        android:clickable="true"
+        android:textSize="35dp"
+        android:background="@drawable/textview_border"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/import_fragment"
+        android:gravity="center"
+        android:text="@string/import_cards"
+        android:layout_weight="1"
+        android:onClick="launchImportActivity"
+        android:clickable="true"
+        android:textSize="35dp"
+        android:background="@drawable/textview_border"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/settings_fragment"
+        android:text="@string/action_settings"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:onClick="launchSettingsActivity"
+        android:clickable="true"
+        android:textSize="35dp"
+        android:background="@drawable/textview_border"/>
+
+
+
+</LinearLayout>

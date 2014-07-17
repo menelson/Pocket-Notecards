@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">FlashCards</string>
+    <string name="app_name">Pocket Flashcards</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="deck1">Deck 1</string>
@@ -9,7 +9,7 @@
     <string name="deck3">Deck 3</string>
     <string name="deck4">Deck 4</string>
     <string name="deck5">Deck 5</string>
-    <string name="welcome">Welcome to Mobile Flash!</string>
+    <string name="welcome">Pocket Notecards</string>
     <string name="ready">Ready? Swipe Right and Left for Questions, Up and Down for Answers.</string>
     <string name="delete">Delete Question</string>
     <string name="edit">Edit Question</string>
@@ -32,5 +32,6 @@
     <string name="known">I know this one</string>
     <string name="title_activity_note_card">NoteCard</string>
     <string name="import_cards">Import Cards</string>
+    <string name="study">Go Study</string>
 
 </resources>
