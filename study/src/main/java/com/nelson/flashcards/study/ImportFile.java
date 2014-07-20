@@ -6,15 +6,10 @@
 
 package com.nelson.flashcards.study;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -22,30 +17,17 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ImportFile extends Activity {
-	
-	private ArrayList<String> question = new ArrayList<String>();
-	private ArrayList<String> answer = new ArrayList<String>();	
-	private String quest;
-	private String answ;
-	protected String fileName;
+
 	protected String folder = "PocketNoteCards";
-	private String type1 = "Question";
-	private String type2 = "Answer";
-	private String empty = "";	
-	protected Intent intent2 = getIntent();	//does nothing?
     protected String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + folder + "/";
     protected int length = filePath.length();
     public File appDirectory = new File(filePath);
     ListView listView;
     NoteCardDB db = new NoteCardDB(this);
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,11 +39,17 @@ public class ImportFile extends Activity {
         if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "External Media Not Mounted", Toast.LENGTH_LONG).show();
         }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(!appDirectory.exists()) {
+                    appDirectory.mkdir();
+                    Toast.makeText(getApplicationContext(), "Dir created: " + folder, Toast.LENGTH_SHORT).show();
+                }
+           }
+        };
+        new Thread(runnable).start();
 
-        if(!appDirectory.exists()) {
-            appDirectory.mkdir();
-            Toast.makeText(this, "Dir created: " + folder, Toast.LENGTH_SHORT).show();
-        }
 
         File [] fileArray = populateFileArray();
         final ArrayList<File> fileArrayList = initializeFiles(fileArray, fileArray.length);
@@ -104,15 +92,23 @@ public class ImportFile extends Activity {
         return fileNames;
     }
 
-    public void writeFileToDB(String subject, File file) {
-        ReadFile fileReader = new ReadFile();
-        ArrayList<Card> cards = fileReader.importFile(file, subject);
-        db.open();
-        for(int i = 0; i < cards.size(); i++) {
-            db.insertRecord(subject, cards.get(i).getQuestion(), cards.get(i).getAnswer(), 0);
-            Log.d("INFO", cards.get(i).getQuestion() + " Added");
-        }
-        db.close();
+    public void writeFileToDB(final String subject, final File file) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ReadFile fileReader = new ReadFile();
+                ArrayList<Card> cards = fileReader.importFile(file, subject);
+                db.open();
+                for(int i = 0; i < cards.size(); i++) {
+                    db.insertRecord(subject, cards.get(i).getQuestion(), cards.get(i).getAnswer(), 0);
+                    Log.d("INFO", cards.get(i).getQuestion() + " Added");
+                }
+                db.close();
+
+            }
+        };
+
+        new Thread(runnable).start();
         Toast.makeText(this, subject+" has been added to the database", Toast.LENGTH_SHORT).show();
     }
 
