@@ -22,9 +22,6 @@ import java.util.ArrayList;
 public class Study extends Activity {
 
     protected NoteCardDB db = new NoteCardDB(this);
-    protected String folder = "PocketNoteCards";
-    protected String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + folder + "/";
-    public File appDirectory = new File(filePath);
     private ArrayList<String> subjectList = new ArrayList<String>();
     private String subject;
 
@@ -47,15 +44,7 @@ public class Study extends Activity {
             }
         });
 
-        //Creating a Directory for Application Text files.
-        if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, "External Media Not Mounted", Toast.LENGTH_LONG).show();
-        } else {
-            if (!appDirectory.exists()) {
-                appDirectory.mkdir();
-                //Toast.makeText(this, "Dir created: " + folder, Toast.LENGTH_SHORT).show();
-            }
-        }
+
     }
 
     @Override
@@ -112,11 +101,9 @@ public class Study extends Activity {
     //Launch NoteCard Activity based on Deck Selected.
     public void launchNoteCard(View view, String subject) {
         String subjectName = subject;
-        int fontSize = 12;
-
         Intent intent = new Intent(this, NoteCard.class);
         intent.putExtra("Subject", subjectName);
-        intent.putExtra("Font", fontSize);
+
         startActivity(intent);
     }
 
