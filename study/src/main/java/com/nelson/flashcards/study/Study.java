@@ -8,42 +8,44 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Mike on 7/17/14.
  */
 public class Study extends Activity {
-    private String [] subjectArray = new String [5];
-    private int [] fontSizeArray = new int [5];
+
     protected NoteCardDB db = new NoteCardDB(this);
-    protected Button[] buttons = new Button [5];
     protected String folder = "PocketNoteCards";
     protected String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + folder + "/";
     public File appDirectory = new File(filePath);
+    private ArrayList<String> subjectList = new ArrayList<String>();
+    private String subject;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        //setContentView(R.layout.welcome_page);
-        //Resources res = getResources();
-        //Drawable shape = res.getDrawable(R.drawable.rounded_button);
+        ListView listView = (ListView)findViewById(R.id.subject_list);
 
-        buttons[0] = (Button)findViewById(R.id.deck1);
-        buttons[1] = (Button)findViewById(R.id.deck2);
-        buttons[2] = (Button)findViewById(R.id.deck3);
-        buttons[3] = (Button)findViewById(R.id.deck4);
-        buttons[4] = (Button)findViewById(R.id.deck5);
+        getUniqueNoteCardSubject();
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subjectList);
+        listView.setAdapter(adapter);
 
-        //deck2.setBackground(shape);
-        initializeSubjectArray();
-        initializeFontSizeArray();
-        setButtonNames(buttons, subjectArray);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                subject = subjectList.get(position);
+                launchNoteCard(view, subject);
+            }
+        });
 
         //Creating a Directory for Application Text files.
         if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -56,15 +58,10 @@ public class Study extends Activity {
         }
     }
 
-    public void test(View view) {
-        Toast.makeText(this, "TextView Clicked", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        initializeSubjectArray();
-        setButtonNames(buttons, subjectArray);
+
     }
 
     @Override
@@ -100,14 +97,11 @@ public class Study extends Activity {
         startActivity(intentCreate);
     }
 
-
     //Go to Settings via Menu
     public void launchSettings(MenuItem item) {
         Intent intentSettings = new Intent(this, CardSettings.class);
         startActivity(intentSettings);
     }
-
-
 
     //Import via menu
     public void launchFileImport(MenuItem item) {
@@ -115,86 +109,26 @@ public class Study extends Activity {
         startActivity(intent);
     }
 
-
-
     //Launch NoteCard Activity based on Deck Selected.
-    public void launchNoteCard(View view) {
-        String subjectName = "";
+    public void launchNoteCard(View view, String subject) {
+        String subjectName = subject;
         int fontSize = 12;
-        switch (view.getId()) {
-            case R.id.deck1:
-                subjectName = subjectArray[0];
-                fontSize = fontSizeArray[0];
-                break;
-            case R.id.deck2:
-                subjectName = subjectArray[1];
-                fontSize = fontSizeArray[1];
-                break;
-            case R.id.deck3:
-                subjectName = subjectArray[2];
-                fontSize = fontSizeArray[2];
-                break;
-            case R.id.deck4:
-                subjectName = subjectArray[3];
-                fontSize = fontSizeArray[3];
-                break;
-            case R.id.deck5:
-                subjectName = subjectArray[4];
-                fontSize = fontSizeArray[4];
-                break;
-            default:
-                break;
-        }
+
         Intent intent = new Intent(this, NoteCard.class);
         intent.putExtra("Subject", subjectName);
         intent.putExtra("Font", fontSize);
         startActivity(intent);
     }
 
-    //Get Stored NoteCard Table Name
-    public String getNoteCardSubject(long rowID) {
-        String subject = null;
+    public void getUniqueNoteCardSubject() {
         db.open();
-        Cursor cursor = db.getSettingsRecord(rowID);
+        Cursor cursor = db.getNoteCardTitles();
         if (cursor.moveToFirst()) {
-            subject = cursor.getString(1);
-        }
-        db.close();
-        return subject;
-    }
-
-    public void setButtonNames(Button [] buttons, String [] subjectArray) {
-        for(int i = 0; i < subjectArray.length; i++) {
-            if(subjectArray[i] == null) {
-                buttons[i].setText("Not Assigned");
-            } else {
-                buttons[i].setText(subjectArray[i]);
+            subjectList.add(cursor.getString(1));
+            while (cursor.moveToNext()) {
+                subjectList.add(cursor.getString(1));
             }
         }
-    }
-
-    public void initializeSubjectArray(){
-        for(int i = 0; i < 5; i++) {
-            long tmpRowId = i + 1;
-            subjectArray[i] = getNoteCardSubject(tmpRowId);
-        }
-    }
-
-    public int getFontSize(long rowId) {
-        int fSize = 12;
-        db.open();
-        Cursor cursor = db.getSettingsRecord(rowId);
-        if(cursor.moveToFirst()) {
-            fSize = cursor.getInt(2);
-        }
         db.close();
-        return fSize;
-    }
-
-    public void initializeFontSizeArray() {
-        for(int i = 0; i < fontSizeArray.length; i++) {
-            long tmpRowId = i + 1;
-            fontSizeArray[i] = getFontSize(tmpRowId);
-        }
     }
 }
