@@ -28,10 +28,11 @@
     <string name="deck_4_file">File for Deck 4</string>
     <string name="deck_5_file">File for Deck 5</string>
     <string name="fileSelect">Select a File</string>
-    <string name="selectFont">Select a Font Size</string>
+    <string name="selectFont">Select a Font Size:</string>
     <string name="known">I know this one</string>
     <string name="title_activity_note_card">NoteCard</string>
     <string name="import_cards">Import Cards</string>
     <string name="study">Go Study</string>
+    <string name="random_question">Random Questions:</string>
 
 </resources>

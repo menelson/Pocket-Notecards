@@ -44,7 +44,7 @@ public class NoteCard extends ActionBarActivity {
         mainDisplay = (TextView)findViewById(R.id.question_text);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         title = getIntent().getExtras().getString("Subject");
-        fontSize = getIntent().getExtras().getInt("Font");
+        fontSize = 35;
         mainDisplay.setTextSize(fontSize);
         loadData(title);
         index = 0;

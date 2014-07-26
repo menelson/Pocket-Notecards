@@ -9,162 +9,130 @@ package com.nelson.flashcards.study;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.*;
 
 
 public class CardSettings extends Activity {
-    NoteCardDB db = new NoteCardDB(this);
-    ArrayList<Deck> deckArrayList = new ArrayList<Deck>();
-    ArrayList<Float> fontSize = new ArrayList<Float>();
-    float [] fonts = new float [10];
-    float defaultFont = 16;
-    ArrayList<String> subjectList = new ArrayList<String>();
-    ListView listView;
+    private NoteCardDB db = new NoteCardDB(this);
+    private ArrayList<String> fontSize = new ArrayList<String>();
+    private float [] fonts = new float [11];
+    private float defaultFont = 16;
+    private Spinner fontSpinner;
+    private Switch randomQuestion;
+    private boolean checked = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_settings);
-        listView = (ListView)findViewById(R.id.settings_list);
+        fontSpinner = (Spinner)findViewById(R.id.font_spinner);
+        randomQuestion = (Switch)findViewById(R.id.switch1);
         initializeSettings();
-        initializeArrayListView();
         initializeFontSizes();
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //Font Spinner Initialization
+        ArrayAdapter<String> fontAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner_dropdown, fontSize);
+        fontSpinner.setAdapter(fontAdapter);
+        fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                displaySettings(deckArrayList.get(position), position);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position == 0) {
+                    //does nothing, spinner is initialized
+                } else {
+                    updateFontSize((int)fonts[position], getRandomQuestionValue());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
+        //Switch handling
+        if(getRandomQuestionValue() == 1)
+            checked = true;
+        else
+            checked = false;
+
+        randomQuestion.setChecked(checked);
+        randomQuestion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    Toast.makeText(getApplicationContext(), "Random Questions will be displayed", Toast.LENGTH_SHORT).show();
+                    updateRandomQuestionOption(1);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Questions will be displayed in order", Toast.LENGTH_SHORT).show();
+                    updateRandomQuestionOption(0);
+                }
+            }
+        });
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,deckArrayList);
-        listView.setAdapter(adapter);
-    }
-
-    public void updateSettings(Deck deck) {
-        db.open();
-        db.updateSettingsRecord(deck.getRowId(), deck.getDeckSubject(), deck.getFontSize());
-        db.close();
     }
 
     public void initializeSettings() {
         db.open();
-        for (int i = 1; i < 6; i++) {
-            Cursor cursor = db.getSettingsRecord(i);
-            if(!cursor.moveToFirst()) {
-                db.insertSettings("Not Assigned", 16);
-            }
-        }
+        Cursor cursor = db.getSettingsRecord(1);
+           if(!cursor.moveToFirst()) {
+             db.insertSettings((int)defaultFont, 0);
+           }
+
         db.close();
     }
 
     public void initializeFontSizes () {
-        for(int i = 0; i < 10; i++)
+        fontSize.add("Select a Font Size");
+        for(int i = 1; i < 11; i++)
         {
-            fontSize.add(defaultFont);
+            fontSize.add(""+defaultFont);
             fonts[i] = defaultFont;
             defaultFont+=4;
         }
     }
 
-    public void initializeArrayListView () {
-        db.open();
-        for(int i = 1; i < 6; i++) {
-            Cursor cursor = db.getSettingsRecord(i);
-            Deck tmpDeck = new Deck(cursor.getInt(0), cursor.getString(1), cursor.getInt(2));
-            deckArrayList.add(tmpDeck);
-        }
-        db.close();
-    }
-
-    //Get Stored NoteCard Table Name
-    public void getUniqueNoteCardSubject() {
-        db.open();
-        Cursor cursor = db.getNoteCardTitles();
-        if (cursor.moveToFirst()) {
-            subjectList.add(cursor.getString(1));
-            while (cursor.moveToNext()) {
-                subjectList.add(cursor.getString(1));
-            }
-        }
-        db.close();
-    }
-
-    public void displaySettings(Deck deck, final int position){
-        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.DialogTheme));
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        dialog.setTitle("Subject: " + deck.getDeckSubject());
-        TextView subjectText = new TextView(this);
-        subjectText.setText("Change Note Card Subject: ");
-        subjectText.setTextColor(getResources().getColor(R.color.black));
-        linearLayout.addView(subjectText);
-
-        final Spinner spinner = new Spinner(this);
-
-        getUniqueNoteCardSubject();
-
-        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(this,
-                R.layout.edit_dialog, subjectList);
-        subjectAdapter.setDropDownViewResource(R.layout.edit_dialog);
-
-        spinner.setAdapter(subjectAdapter);
-
-
-        linearLayout.addView(spinner);
-
-        TextView fontText = new TextView(this);
-        fontText.setText("Change Font Size: ");
-        fontText.setTextColor(getResources().getColor(R.color.black));
-        linearLayout.addView(fontText);
-        final Spinner fontSpinner = new Spinner(new ContextThemeWrapper(this, R.style.DialogTheme));
-        ArrayAdapter<Float> adapterFont = new ArrayAdapter<Float> (this, R.layout.edit_dialog, fontSize);
-        adapterFont.setDropDownViewResource(R.layout.edit_dialog);
-        fontSpinner.setAdapter(adapterFont);
-
-        linearLayout.addView(fontSpinner);
-        dialog.setView(linearLayout);
-
-        dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+    public void updateFontSize(final int fontSize, final int randomQuestion) {
+        Runnable runnable = new Runnable() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String subject = spinner.getSelectedItem().toString();
-                String fontString = fontSpinner.getSelectedItem().toString();
-                float tmpFont = Float.parseFloat(fontString);
-                Deck tmpDeck = new Deck(deckArrayList.get(position).getRowId(), subject, (int)tmpFont);
-                deckArrayList.set(position, tmpDeck);
-                Toast.makeText(getApplicationContext(), "Deck: " + tmpDeck, Toast.LENGTH_SHORT).show();
-                updateSettings(tmpDeck);
-                refreshView();
-
+            public void run() {
+                db.open();
+                db.updateSettingsRecord(1, fontSize, randomQuestion);
+                db.close();
             }
-        });
-
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //Do nothing
-            }
-        });
-
-        dialog.show();
+        };
+        runnable.run();
     }
 
-    public void refreshView() {
-        listView.invalidateViews();
+    public void updateRandomQuestionOption(final int randomQuestion) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                db.open();
+                db.updateRandomQuestion(randomQuestion);
+                db.close();
+            }
+        };
+        runnable.run();
+    }
+
+    public int getRandomQuestionValue() {
+        int value = 0;
+        db.open();
+        Cursor cursor = db.getSettingsRecord(1);
+        if(cursor.moveToFirst()){
+            value = cursor.getInt(2);
+        }
+        return value;
     }
 
 

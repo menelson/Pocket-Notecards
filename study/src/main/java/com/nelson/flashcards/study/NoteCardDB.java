@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.SQLException;
 import android.util.Log;
 
-import java.util.Currency;
-
 
 /**
  * Created by Mike on 5/29/2014.
@@ -21,14 +19,14 @@ public class NoteCardDB {
     public static final String KEY_QUESTION = "question";
     public static final String KEY_ANSWER = "answer";
     public static final String KEY_KNOWN = "known";
-    public static final String KEY_DECKNAME = "deck_name"; //Subject for each note card topic
     public static final String KEY_FONTSIZE = "font_size";
+    public static final String KEY_RANDOM = "random_question";
     private static final String TAG = "NoteCardDB";
 
     private static final String DATABASE_NAME = "NoteCards";
     private static final String DATABASE_TABLE = "FlashCards";
     private static final String DB_SETTINGS_TABLE = "Settings";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_CREATE_NOTECARD =
             " create table if not exists " + DATABASE_TABLE + " (id integer primary key autoincrement, "
@@ -36,7 +34,7 @@ public class NoteCardDB {
 
     private static final String DATABASE_CREATE_CARD_SETTINGS =
             " create table if not exists " + DB_SETTINGS_TABLE + " (id integer primary key autoincrement, "
-                    + "deck_name VARCHAR, font_size INTEGER )";
+                    + "font_size INTEGER, random_question INTEGER )";
 
     private final Context context;
 
@@ -111,7 +109,7 @@ public class NoteCardDB {
     }
 
     //Get one Record
-    public Cursor getRecord(long rowId) throws SQLException {
+    /*public Cursor getRecord(long rowId) throws SQLException {
         Cursor qCursor = db.query(true, DATABASE_TABLE, new String[] {KEY_ROWID, KEY_CARDNAME,
             KEY_QUESTION, KEY_ANSWER, KEY_KNOWN}, KEY_ROWID + "=" + rowId, null,
                 null, null, null, null);
@@ -119,7 +117,7 @@ public class NoteCardDB {
             qCursor.moveToFirst();
         }
         return qCursor;
-    }
+    }*/
 
     //Update one record
     public boolean updateRecord(long rowId, String cardName, String question, String answer, int known) {
@@ -133,38 +131,34 @@ public class NoteCardDB {
 
     //Methods for interacting with the Settings Table
     //Insert Settings info
-    public long insertSettings (String deckName, int fontSize) {
+    public long insertSettings (int fontSize, int randomQuestion) {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_DECKNAME, deckName);
         initialValues.put(KEY_FONTSIZE, fontSize);
+        initialValues.put(KEY_RANDOM, randomQuestion);
         return db.insert(DB_SETTINGS_TABLE, null, initialValues);
     }
 
-    public boolean updateSettingsRecord(long rowId, String deckName, int fontSize) {
+    public boolean updateSettingsRecord(long rowId, int fontSize, int randomQuestion) {
         ContentValues newValues = new ContentValues();
-        newValues.put(KEY_DECKNAME, deckName);
         newValues.put(KEY_FONTSIZE, fontSize);
+        newValues.put(KEY_RANDOM, randomQuestion);
         return db.update(DB_SETTINGS_TABLE, newValues, KEY_ROWID + "=" + rowId, null) > 0;
+    }
+
+    public boolean updateRandomQuestion(int randomQuestion) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_RANDOM, randomQuestion);
+        return db.update(DB_SETTINGS_TABLE, newValues, KEY_ROWID + "= 1", null) > 0;
     }
 
     public Cursor getSettingsRecord(long rowId) {
         Cursor cursor = db.query(true, DB_SETTINGS_TABLE,
-                new String[] {KEY_ROWID, KEY_DECKNAME, KEY_FONTSIZE},
+                new String[] {KEY_ROWID, KEY_FONTSIZE, KEY_RANDOM},
                 KEY_ROWID + "=" + rowId, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
-
-    /*public Cursor getAllSettings(){
-        return db.query(true, DB_SETTINGS_TABLE,
-                new String[] {KEY_ROWID, KEY_DECKNAME, KEY_FONTSIZE},
-                null, null, null, null, null, null, null);
-    }*/
-
-
-
-
 
 }
