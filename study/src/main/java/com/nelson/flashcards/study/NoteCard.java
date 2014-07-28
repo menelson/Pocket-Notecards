@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -29,12 +30,13 @@ public class NoteCard extends ActionBarActivity {
     private int size, index, previous;
     protected ArrayList<Card> noteCards = new ArrayList<Card>();
 
-    NoteCardDB db = new NoteCardDB(this);
-    Random randomNum = new Random();
-    GestureDetectorCompat gestDetector;
-    TextView mainDisplay;
-    String title;
-    int fontSize;
+    private NoteCardDB db = new NoteCardDB(this);
+    private Random randomNum = new Random();
+    private GestureDetectorCompat gestDetector;
+    private TextView mainDisplay;
+    private String title;
+    private int fontSize;
+    private boolean randomOption;
 
 
     @Override
@@ -44,12 +46,13 @@ public class NoteCard extends ActionBarActivity {
         mainDisplay = (TextView)findViewById(R.id.question_text);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         title = getIntent().getExtras().getString("Subject");
-        fontSize = 35;
+        fontSize = getFontSize();//35;
         mainDisplay.setTextSize(fontSize);
         loadData(title);
         index = 0;
         size = noteCards.size();
         randomNum = new Random(size);
+        randomOption = randomOption();
 
     }
 
@@ -205,6 +208,41 @@ public class NoteCard extends ActionBarActivity {
         size--;
     }
 
+    public int getFontSize(){
+        int fontSize = 0;
+        db.open();
+        Cursor cursor = db.getSettingsRecord(1);
+        if(cursor.moveToFirst()){
+            fontSize = cursor.getInt(1);
+        }
+        db.close();
+        Log.d("Font Size: ", ""+fontSize);
+
+        return fontSize;
+    }
+
+    public boolean randomOption() {
+        boolean tmpBool;// = false;
+        int option = 0;
+
+        db.open();
+        Cursor cursor = db.getSettingsRecord(1);
+        if(cursor.moveToFirst()){
+            option = cursor.getInt(2);
+        }
+        db.close();
+
+        if(option == 1){
+            tmpBool = true;
+            Log.d("tmpBool", ""+tmpBool);
+        } else {
+            tmpBool = false;
+            Log.d("tmpBool", ""+tmpBool);
+        }
+
+        return tmpBool;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent one) {
         //Setting up for Gesture based events
@@ -223,14 +261,24 @@ public class NoteCard extends ActionBarActivity {
 
     //Randomly goes to the next Note Card based on a Num Generator
     public void onSwipeLeft() {
-        previous = index;
-        index = randomNum.nextInt(size);
+        if(randomOption) {
+            previous = index;
+            index = randomNum.nextInt(size);
+            Log.d("Swipe Left", "Random On");
+        } else {
+            index++;
+            Log.d("Swipe Left", "Random Off");
+        }
         mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
     public void onSwipeRight() {
         //Goes back to only one previous card
-        index = previous;
+        if(randomOption == true){
+            index = previous;
+        }else {
+            index--;
+        }
         mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
