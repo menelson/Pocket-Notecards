@@ -9,9 +9,6 @@ import android.database.SQLException;
 import android.util.Log;
 
 
-/**
- * Created by Mike on 5/29/2014.
- */
 public class NoteCardDB {
 
     public static final String KEY_ROWID = "id";
@@ -127,6 +124,12 @@ public class NoteCardDB {
         newValues.put(KEY_ANSWER, answer);
         newValues.put(KEY_KNOWN, known);
         return db.update(DATABASE_TABLE, newValues, KEY_ROWID + "=" + rowId, null) > 0;
+    }
+
+    public boolean updateKnownValue(long rowId, int known) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_KNOWN, known);
+        return db.update(DATABASE_TABLE, contentValues, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
     //Methods for interacting with the Settings Table

@@ -1,7 +1,14 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
 
     <TextView
@@ -20,7 +27,6 @@
         android:id="@+id/title_edit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView1"
         android:ems="15"
         android:background="@drawable/cardtheme_edit_text_holo_dark"
         android:textColor="@color/off_white"
@@ -32,18 +38,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/title_edit"
-        android:layout_below="@+id/title_edit"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10sp"
         android:textSize="25sp"
         android:text="@string/question"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="15"
+        android:background="@drawable/cardtheme_edit_text_holo_dark"
+        android:textColor="@color/off_white"
+        android:textColorHint="@color/off_white"
+        android:hint="@string/question" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:text="@string/answer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="15"
+        android:textColor="@color/off_white"
+        android:textColorHint="@color/off_white"
+        android:background="@drawable/cardtheme_edit_text_holo_dark"
+        android:hint="@string/answer" />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:textSize="30sp"
         android:background="@drawable/cardtheme_btn_default_holo_dark"
@@ -58,40 +95,7 @@
         android:textSize="30sp"
         android:background="@drawable/cardtheme_btn_default_holo_dark"
         android:text="@string/finish" />
+        </LinearLayout>
+    </ScrollView>
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="10dp"
-        android:ems="15"
-        android:background="@drawable/cardtheme_edit_text_holo_dark"
-        android:textColor="@color/off_white"
-        android:textColorHint="@color/off_white"
-        android:hint="@string/question" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:textSize="30sp"
-        android:text="@string/answer"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="10dp"
-        android:ems="15"
-        android:textColor="@color/off_white"
-        android:textColorHint="@color/off_white"
-        android:background="@drawable/cardtheme_edit_text_holo_dark"
-        android:hint="@string/answer" />
-
-</RelativeLayout>

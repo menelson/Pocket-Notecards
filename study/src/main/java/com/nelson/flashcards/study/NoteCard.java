@@ -3,6 +3,7 @@ package com.nelson.flashcards.study;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -54,6 +55,12 @@ public class NoteCard extends ActionBarActivity {
         randomNum = new Random(size);
         randomOption = randomOption();
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
 
@@ -222,7 +229,7 @@ public class NoteCard extends ActionBarActivity {
     }
 
     public boolean randomOption() {
-        boolean tmpBool;// = false;
+        boolean tmpBool;
         int option = 0;
 
         db.open();
@@ -243,6 +250,21 @@ public class NoteCard extends ActionBarActivity {
         return tmpBool;
     }
 
+    public void memorized(){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                db.open();
+                db.updateKnownValue(noteCards.get(index).getRowId(), 1);
+                db.close();
+
+                Toast.makeText(getApplicationContext(), noteCards.get(index).getQuestion()
+                        + " is memorized", Toast.LENGTH_SHORT).show();
+            }
+        };
+        runnable.run();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent one) {
         //Setting up for Gesture based events
@@ -261,20 +283,22 @@ public class NoteCard extends ActionBarActivity {
 
     //Randomly goes to the next Note Card based on a Num Generator
     public void onSwipeLeft() {
-        if(randomOption) {
-            previous = index;
-            index = randomNum.nextInt(size);
-            Log.d("Swipe Left", "Random On");
-        } else {
-            index++;
-            Log.d("Swipe Left", "Random Off");
-        }
+
+                if (randomOption) {
+                    previous = index;
+                    index = randomNum.nextInt(size);
+                    Log.d("Swipe Left", "Random On");
+                } else {
+                    index++;
+                    Log.d("Swipe Left", "Random Off");
+                }
+
         mainDisplay.setText(noteCards.get(index).getQuestion());
     }
 
     public void onSwipeRight() {
         //Goes back to only one previous card
-        if(randomOption == true){
+        if(randomOption){
             index = previous;
         }else {
             index--;
@@ -312,6 +336,11 @@ public class NoteCard extends ActionBarActivity {
                 exception.printStackTrace();
             }
             return result;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent motionEvent){
+            memorized();
         }
     }
 }
