@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class NoteCard extends ActionBarActivity {
     private Random randomNum = new Random();
     private GestureDetectorCompat gestDetector;
     private TextView mainDisplay;
+    private ScrollView scrollView;
     private String title;
     private int fontSize;
     private boolean randomOption;
@@ -45,10 +48,13 @@ public class NoteCard extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_card);
         mainDisplay = (TextView)findViewById(R.id.question_text);
+        //scrollView = (ScrollView)findViewById(R.id.scroll_view);
         gestDetector = new GestureDetectorCompat(this, new MyGestureListener());
         title = getIntent().getExtras().getString("Subject");
         fontSize = getFontSize();//35;
         mainDisplay.setTextSize(fontSize);
+        //mainDisplay.setMovementMethod(new ScrollingMovementMethod());
+        //scrollView.addView(mainDisplay);
         loadData(title);
         index = 0;
         size = noteCards.size();
