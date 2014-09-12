@@ -1,13 +1,15 @@
 /*
  * @Author Mike Nelson
  * 
- * CreateQuestion.java writes questions & answers to the correct file
+ *
  */
 
 package com.nelson.flashcards.study;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -29,12 +31,17 @@ public class ImportFile extends Activity {
     ListView listView;
     NoteCardDB db = new NoteCardDB(this);
 
+    private FileAdapter adapter;
+    private File currentDir;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.import_file);
+        currentDir = new File("/sdcard/");
+        fill(currentDir);
+        //setContentView(R.layout.import_file);
 
-        listView = (ListView)findViewById(R.id.file_list);
+        /*listView = (ListView)findViewById(R.id.file_list);
 
         if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "External Media Not Mounted", Toast.LENGTH_LONG).show();
@@ -64,9 +71,50 @@ public class ImportFile extends Activity {
 
             }
         });
-
+*/
     }
 
+    private void fill(File file){
+        File [] dirs = file.listFiles();
+        this.setTitle("Current Dir: " + file.getName());
+        List<FileItem> dir = new ArrayList<FileItem>();
+        List<FileItem>files = new ArrayList<FileItem>();
+
+        try {
+            for(File f: dirs){
+                if(f.isDirectory()){
+                    File[] fileBuffer = f.listFiles();
+                    int buffer = 0;
+                    if(fileBuffer != null) {
+                        buffer = fileBuffer.length;
+                    }
+                    else buffer = 0;
+
+                    String num_item = String.valueOf(buffer);
+
+                    if(buffer == 0)
+                        num_item = num_item + " item";
+                    else
+                        num_item = num_item + " items";
+
+                    dir.add(new FileItem(f.getName(),f.getAbsolutePath(), "directory_icon"));
+                }
+                else{
+                    files.add(new FileItem(f.getName(), f.getAbsolutePath(), "file_icon"));
+                }
+
+            }
+        } catch (Exception e) {}
+        Collections.sort(dir);
+        Collections.sort(files);
+        dir.addAll(files);
+
+        if(!file.getName().equalsIgnoreCase("sdcard"))
+          dir.add(0, new FileItem("Parent Directory", file.getParent(), "directory_up"));
+        adapter = new FileAdapter(ImportFile.this, R.layout.import_file, dir);
+    }
+
+    //Old Code
     public File [] populateFileArray () {
         File [] tmpFileArray;
         tmpFileArray = appDirectory.listFiles();
