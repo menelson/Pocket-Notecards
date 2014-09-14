@@ -6,17 +6,23 @@ package com.nelson.flashcards.study;
 public class FileItem implements Comparable<FileItem> {
 
     private String name;
+    private String data;
     private String image;
     private String path;
 
-    public FileItem(String name, String image, String path) {
+    public FileItem(String name, String data, String image, String path) {
         this.name = name;
+        this.data = data;
         this.image = image;
         this.path = path;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getData() {
+        return data;
     }
 
     public String getPath(){

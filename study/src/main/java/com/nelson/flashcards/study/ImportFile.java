@@ -11,67 +11,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ImportFile extends Activity {
+public class ImportFile extends ListActivity {
 
-	protected String folder = "PocketNoteCards";
-    protected String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + folder + "/";
-    protected int length = filePath.length();
-    public File appDirectory = new File(filePath);
-    ListView listView;
-    NoteCardDB db = new NoteCardDB(this);
-
+    private NoteCardDB db = new NoteCardDB(this);
     private FileAdapter adapter;
     private File currentDir;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentDir = new File("/sdcard/");
+        currentDir = new File("/storage/");
         fill(currentDir);
-        //setContentView(R.layout.import_file);
 
-        /*listView = (ListView)findViewById(R.id.file_list);
-
-        if(!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, "External Media Not Mounted", Toast.LENGTH_LONG).show();
-        }
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(!appDirectory.exists()) {
-                    appDirectory.mkdir();
-                    Toast.makeText(getApplicationContext(), "Dir created: " + folder, Toast.LENGTH_SHORT).show();
-                }
-           }
-        };
-        new Thread(runnable).start();
-
-
-        File [] fileArray = populateFileArray();
-        final ArrayList<File> fileArrayList = initializeFiles(fileArray, fileArray.length);
-        final ArrayList<String> fileNameArrayList = getFileNames(fileArrayList);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, fileNameArrayList);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                writeFileToDB(fileNameArrayList.get(position), fileArrayList.get(position));
-
-            }
-        });
-*/
     }
 
     private void fill(File file){
@@ -84,7 +43,7 @@ public class ImportFile extends Activity {
             for(File f: dirs){
                 if(f.isDirectory()){
                     File[] fileBuffer = f.listFiles();
-                    int buffer = 0;
+                    int buffer;
                     if(fileBuffer != null) {
                         buffer = fileBuffer.length;
                     }
@@ -97,10 +56,10 @@ public class ImportFile extends Activity {
                     else
                         num_item = num_item + " items";
 
-                    dir.add(new FileItem(f.getName(),f.getAbsolutePath(), "directory_icon"));
+                    dir.add(new FileItem(f.getName(),num_item, "directory_image", f.getAbsolutePath()));
                 }
                 else{
-                    files.add(new FileItem(f.getName(), f.getAbsolutePath(), "file_icon"));
+                    files.add(new FileItem(f.getName(), f.length() + " Byte", "file_image", f.getAbsolutePath()));
                 }
 
             }
@@ -110,34 +69,27 @@ public class ImportFile extends Activity {
         dir.addAll(files);
 
         if(!file.getName().equalsIgnoreCase("sdcard"))
-          dir.add(0, new FileItem("Parent Directory", file.getParent(), "directory_up"));
+          dir.add(0, new FileItem("..", "Parent Directory", "directory_image", file.getParent()));
         adapter = new FileAdapter(ImportFile.this, R.layout.import_file, dir);
+        this.setListAdapter(adapter);
     }
 
-    //Old Code
-    public File [] populateFileArray () {
-        File [] tmpFileArray;
-        tmpFileArray = appDirectory.listFiles();
-
-        return tmpFileArray;
-    }
-
-    public ArrayList<File> initializeFiles (File [] files, int size) {
-        ArrayList<File> tmpList = new ArrayList<File>();
-        for(int i = 0; i < size; i++)
-            tmpList.add(files[i]);
-        return tmpList;
-    }
-
-    public ArrayList<String> getFileNames (ArrayList<File> files) {
-        ArrayList<String> fileNames = new ArrayList<String>();
-        String tmpString;
-        for(int i = 0; i < files.size(); i++) {
-            tmpString = files.get(i).getAbsolutePath().toString();
-            fileNames.add(tmpString.substring(length, tmpString.length()-4));
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d("Clicked: ", "Item Clicked");
+        FileItem o = adapter.getFileItem(position);
+        if(o.getImage().equalsIgnoreCase("directory_image") || o.getImage().equalsIgnoreCase("directory_up")){
+            currentDir = new File(o.getPath());
+            Log.d("Current Dir: ", currentDir.toString());
+            fill(currentDir);
         }
-
-        return fileNames;
+        else
+        {
+            File selected = new File(o.getPath());
+            Log.d("File clicked", ""+selected);
+            writeFileToDB(o.getName().substring(0, o.getName().length()-4), selected);
+        }
     }
 
     public void writeFileToDB(final String subject, final File file) {

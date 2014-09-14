@@ -3,6 +3,7 @@ package com.nelson.flashcards.study;
 import java.util.List;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,15 +43,22 @@ public class FileAdapter extends ArrayAdapter<FileItem>{
         final FileItem o = items.get(position);
 
         if(o != null) {
-            TextView textView = (TextView) view.findViewById(R.id.file_text_view);
+            TextView fileTV = (TextView) view.findViewById(R.id.file_text_view);
+            TextView dataTV = (TextView) view.findViewById(R.id.data_text_view);
             ImageView imageView = (ImageView) view.findViewById(R.id.file_icon);
             String uri = "drawable/" + o.getImage();
-            int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+            Log.d("URI: ", uri);
+            Log.d("Package", context.getPackageName());
+            int imageResource = context.getResources().getIdentifier(uri, "drawable", context.getPackageName());
+
+            Log.d("Image Resource ID", ""+imageResource);
             Drawable image = context.getResources().getDrawable(imageResource);
             imageView.setImageDrawable(image);
 
-            if(textView != null)
-                textView.setText(o.getName());
+            if(fileTV != null)
+                fileTV.setText(o.getName());
+            if(dataTV != null)
+                dataTV.setText(o.getData());
         }
 
         return view;
