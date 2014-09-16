@@ -28,7 +28,7 @@ public class ImportFile extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentDir = new File("/storage/");
+        currentDir = new File("/sdcard/");
         fill(currentDir);
 
     }
